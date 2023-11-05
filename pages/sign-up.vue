@@ -11,7 +11,7 @@ import TextInput from '~/components/TextInput.vue';
             <TextInput title="Username"/>
             <TextInput title="Password" type="password"/>
             <TextInput title="Confirm Password" type="password"/>
-            <Button text="Submit" />
+            <Button text="Create" />
         </div>
         <p class="text-center text-sm"><b>Already have an account?<br/><u class="hover:cursor-pointer">Log in</u></b></p>
     </div>
