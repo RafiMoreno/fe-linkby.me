@@ -9,7 +9,15 @@ export default {
     "./error.vue",
   ],
   theme: {
-    extend: {},
+    fontFamily: {
+      sans: ['"Nunito"', 'sans-serif']
+    },
+
+    extend: {    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      'dark-red': '#a44646',
+    }},
   },
   plugins: [],
 }
