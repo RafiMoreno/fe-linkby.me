@@ -1,6 +1,8 @@
 <script setup>
-const props = defineProps(['title', 'hintText'])
-console.log(props.hintText)
+const props = defineProps({
+    title: String,
+    hintText: String
+})
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import TextInput from '~/components/TextInput.vue';
 </script>
 
@@ -10,9 +10,9 @@ import TextInput from '~/components/TextInput.vue';
             <p class="text-base"><b>Log in to your account</b></p>
             <TextInput title="Username"/>
             <TextInput title="Password" type="password"/>
-            <Button text="Log in" />
+            <Button>Log in</Button>
         </div>
-        <p class="text-center text-sm"><b>Don't have an account?<br/><u class="hover:cursor-pointer">Sign Up</u></b></p>
+        <p class="text-center text-sm">Don't have an account?<br/><NuxtLink to="/sign-up" class="hover:cursor-pointer underline">Sign Up</NuxtLink></p>
     </div>
 
 </template>
