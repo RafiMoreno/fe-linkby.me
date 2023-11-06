@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import TextInput from '~/components/TextInput.vue';
 </script>
 
@@ -11,9 +11,9 @@ import TextInput from '~/components/TextInput.vue';
             <TextInput title="Username"/>
             <TextInput title="Password" type="password"/>
             <TextInput title="Confirm Password" type="password"/>
-            <Button text="Create" />
+            <Button> Sign Up </Button>
         </div>
-        <p class="text-center text-sm"><b>Already have an account?<br/><u class="hover:cursor-pointer">Log in</u></b></p>
+        <p class="text-center text-sm">Already have an account?<br/><NuxtLink to="/login" class="hover:cursor-pointer underline">Log in</NuxtLink></p>
     </div>
 
 </template>
