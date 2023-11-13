@@ -13,4 +13,13 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/css/main.css'],
+  modules: [
+    '@nuxt/image',
+    '@nuxtjs/google-fonts'
+  ],
+  googleFonts: {
+    families: {
+      Nunito: [300, 400, 700]
+    }
+  }
 })
