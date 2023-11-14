@@ -21,5 +21,8 @@ export default defineNuxtConfig({
     families: {
       Nunito: [300, 400, 700]
     }
-  }
+  },
+  runtimeConfig: {
+    APIBaseUrl: process.env.APIBaseUrl,
+  },
 })

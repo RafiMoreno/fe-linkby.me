@@ -1,13 +1,39 @@
 <script setup lang="ts">
     import { Icon } from '@iconify/vue'
 
+    interface Link {
+        id: string,
+        url: string,
+        linkTitle : string,
+        clickCount: string,
+        imageUrl?:string  
+    }
+
+    interface Profile {
+        ID: number,
+        CreatedAt?: string,
+        UpdatedAt?: string,
+        DeletedAt?: null,
+        displayName: string,
+        primaryColor: string
+        secondaryColor: string
+        description: string,
+        displayPicture: string,
+        links?: Link[]
+    }
+
     const route = useRoute();
     var username: string | string[] = route.params.username;
-    const data = reactive({
+
+    const profileData = ref<Profile>()
+    const { data, pending, error, refresh } = await useFetch<Profile>(`localhost:8080/api/v1/profile/${username}`)
+
+
+    console.log(`localhost:8080/api/v1/profile/${username}`)
+    console.log("data", data.value)
+    const dummyData: Profile = reactive({
+        'ID':1,
         'displayName': `Display Name ${username}`,
-        'user':{
-            'username': username
-        },
         'primaryColor': '#A44646',
         'secondaryColor': '#EEEEEE',
         'description': "Aenean placerat. In vulputate urna eu arcu. Aliquam erat volutpat. Suspendisse potenti. Morbi mattis felis at nunc. Duis viverra diam non justo. In nisl. Nullam sit amet magna in magna gravida vehicula. Mauris tincidunt sem sed arcu. Nunc posuere. Nullam lectus justo",
@@ -50,14 +76,22 @@
             },
         ]
     }) 
-    const linkBoxStyle = { 'color': data.primaryColor, 'backgroundColor':data.secondaryColor }
-    const pageStyle = { 'backgroundColor': data.primaryColor, 'color':data.secondaryColor }
+
+    if (data.value){
+        profileData.value = data.value
+        data.value!.links = dummyData.links
+    }
+
+    console.log("profile data",profileData)
+
+    const linkBoxStyle = { 'color': data.value?.primaryColor ?? '#A44646', 'backgroundColor':data.value?.secondaryColor ?? '#FFFFFF' }
+    const pageStyle = { 'backgroundColor': data.value?.primaryColor ??'#A44646', 'color':data.value?.secondaryColor ?? '#FFFFFF'}
 </script>
 
 
 <template>
     <div :style="pageStyle" class="h-screen overflow-scroll">
-        <div class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto">
+        <div v-if="data" class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto">
             <!-- <Icon icon="mdi:pencil" /> -->
             <NuxtImg 
                 v-if="data.displayPicture != undefined && data.displayPicture!=''" 
@@ -77,5 +111,16 @@
                 {{link.linkTitle}}
             </LinkBox>
         </div>
+        <div v-if="error"><ul>
+            <li>
+                {{ error.cause }}
+            </li>
+            <li>
+                {{ error.data }}
+            </li>
+            <li>
+                {{ error.message }}
+            </li>
+        </ul></div>
     </div>
 </template>
