@@ -1,10 +1,8 @@
 <script setup lang="ts">
-    import { Icon } from '@iconify/vue'
-
     const route = useRoute();
     var username: string | string[] = route.params.username;
     const data = reactive({
-        'displayName': `Display Name ${username}`,
+        'displayName': `Edit Page ${username}`,
         'user':{
             'username': username
         },
@@ -52,6 +50,7 @@
     }) 
     const linkBoxStyle = { 'color': data.primaryColor, 'backgroundColor':data.secondaryColor }
     const pageStyle = { 'backgroundColor': data.primaryColor, 'color':data.secondaryColor }
+    const handleEditClick = function (data: Object) {console.log(data)}
 </script>
 
 
@@ -68,12 +67,13 @@
             <p>{{ data.description }}</p>
             <div class="h-[25px]"/>
             <LinkBox 
-                variant="default" 
+                variant="edit" 
                 :style="linkBoxStyle" 
                 v-for="link in data.links" 
                 v-bind:key="link.id" 
                 :url="link.url" 
                 :image-url="link.imageUrl"
+                :handle-edit-click="() => handleEditClick(link)"
                 >
                 {{link.linkTitle}}
             </LinkBox>
