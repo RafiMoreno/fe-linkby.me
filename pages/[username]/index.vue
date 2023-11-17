@@ -22,11 +22,14 @@
         links?: Link[]
     }
 
+    interface ProfileResponse {
+        profile: Profile,
+    }
+
     const route = useRoute();
     var username: string | string[] = route.params.username;
 
-    const profileData = ref<Profile>()
-    const { data, pending, error, refresh } = await useFetch<Profile>(`localhost:8080/api/v1/profile/${username}`)
+    const { data, pending, error, refresh } = await useFetch<ProfileResponse>(`http://127.0.0.1:8080/api/v1/profile/${username}`)
 
 
     console.log(`localhost:8080/api/v1/profile/${username}`)
@@ -78,32 +81,33 @@
     }) 
 
     if (data.value){
-        profileData.value = data.value
-        data.value!.links = dummyData.links
+        data.value!.profile.links = dummyData.links
     }
 
-    console.log("profile data",profileData)
 
-    const linkBoxStyle = { 'color': data.value?.primaryColor ?? '#A44646', 'backgroundColor':data.value?.secondaryColor ?? '#FFFFFF' }
-    const pageStyle = { 'backgroundColor': data.value?.primaryColor ??'#A44646', 'color':data.value?.secondaryColor ?? '#FFFFFF'}
+    const profile = data.value?.profile
+
+
+    
+    const linkBoxStyle = { 'color': profile?.primaryColor ?? '#A44646', 'backgroundColor':profile?.secondaryColor ?? '#FFFFFF' }
+    const pageStyle = { 'backgroundColor': profile?.primaryColor ??'#A44646', 'color':profile?.secondaryColor ?? '#FFFFFF'}
 </script>
 
 
 <template>
     <div :style="pageStyle" class="h-screen overflow-scroll">
-        <div v-if="data" class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto">
-            <!-- <Icon icon="mdi:pencil" /> -->
+        <div v-if="profile != null" class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto ">
             <NuxtImg 
-                v-if="data.displayPicture != undefined && data.displayPicture!=''" 
-                class="object-cover w-[150px] rounded-[50%] aspect-square" 
-                :src="data.displayPicture"
+                v-if="profile.displayPicture != undefined && profile.displayPicture!=''" 
+                class="object-cover w-[150px] rounded-[50%] aspect-square profileImg" 
+                :src="profile.displayPicture"
                 />
-            <b class="text-2xl">{{ data.displayName }}</b>
-            <p>{{ data.description }}</p>
+            <b class="text-2xl">{{ profile.displayName }}</b>
+            <p>{{ profile.description }}</p>
             <div class="h-[25px]"/>
             <LinkBox 
                 :style="linkBoxStyle" 
-                v-for="link in data.links" 
+                v-for="link in profile.links" 
                 v-bind:key="link.id" 
                 :url="link.url" 
                 :image-url="link.imageUrl"
@@ -124,3 +128,9 @@
         </ul></div>
     </div>
 </template>
+
+<style scoped>
+.profileImg{
+    filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.30));
+}
+</style>
