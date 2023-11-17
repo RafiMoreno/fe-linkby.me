@@ -96,14 +96,14 @@
 
 <template>
     <div :style="pageStyle" class="h-screen overflow-scroll">
-        <div v-if="profile != null" class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto ">
+        <div v-if="profile != null" class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto  select-none">
             <NuxtImg 
                 v-if="profile.displayPicture != undefined && profile.displayPicture!=''" 
                 class="object-cover w-[150px] rounded-[50%] aspect-square profileImg" 
                 :src="profile.displayPicture"
                 />
-            <b class="text-2xl">{{ profile.displayName }}</b>
-            <p>{{ profile.description }}</p>
+            <b class="text-2xl select-text">{{ profile.displayName }}</b>
+            <p class="select-text">{{ profile.description }}</p>
             <div class="h-[25px]"/>
             <LinkBox 
                 :style="linkBoxStyle" 
