@@ -57,15 +57,15 @@
 
 <template>
     <div :style="pageStyle" class="h-screen overflow-scroll">
-        <div class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto">
+        <div class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto select-none">
             <!-- <Icon icon="mdi:pencil" /> -->
             <NuxtImg 
                 v-if="data.displayPicture != undefined && data.displayPicture!=''" 
                 class="object-cover w-[150px] rounded-[50%] aspect-square" 
                 :src="data.displayPicture"
                 />
-            <b class="text-2xl">{{ data.displayName }}</b>
-            <p>{{ data.description }}</p>
+            <b class="text-2xl select-text">{{ data.displayName }}</b>
+            <p class="select-text">{{ data.description }}</p>
             <div class="h-[25px]"/>
             <LinkBox 
                 :style="linkBoxStyle" 

@@ -1,16 +1,39 @@
 <script setup lang="ts">
 import TextInput from '~/components/TextInput.vue';
+
+import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
+import { useAuthStore } from '~/store/auth'; // import the auth store we just created
+
+const { authenticateUser } = useAuthStore(); // use authenticateUser action from  auth store
+
+const { authenticated } = storeToRefs(useAuthStore()); 
+
+const user = ref({
+  username: '',
+  password: '',
+})
+
+const router = useRouter();
+
+const login = async () => {
+  await authenticateUser(user.value); // call authenticateUser and pass the user object
+  // redirect to homepage if user is authenticated
+  if (authenticated) {
+    router.push(`${user.value.username}`);
+  }
+};
+
 </script>
 
 
 <template>
-    <div class="container m-auto flex flex-col items-center min-h-screen justify-around">
-        <h1 class="text-dark-red text-[100px] select-none">Link<sub class="text-[50px]">by.me</sub></h1>
-        <div class="flex flex-col px-12 w-[406px] items-center gap-[16px]">
+    <div class="container  m-auto flex flex-col items-center min-h-screen justify-around">
+        <h1 class="text-dark-red text-[100px] select-none font-black" >Link<sub class="text-[50px]">by.me</sub></h1>
+        <div class="flex flex-col px-12 w-[406px] items-center gap-[16px] form">
             <p class="text-base"><b>Log in to your account</b></p>
-            <TextInput title="Username"/>
-            <TextInput title="Password" type="password"/>
-            <Button>Log in</Button>
+            <TextInput v-model="user.username" title="Username" required/>
+            <TextInput v-model="user.password" title="Password" type="password" required/>
+            <Button  @click.prevent="login">Log in</Button>
         </div>
         <p class="text-center text-sm">Don't have an account?<br/><NuxtLink to="/sign-up" class="hover:cursor-pointer underline">Sign Up</NuxtLink></p>
     </div>

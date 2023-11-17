@@ -51,6 +51,10 @@
     const linkBoxStyle = { 'color': data.primaryColor, 'backgroundColor':data.secondaryColor }
     const pageStyle = { 'backgroundColor': data.primaryColor, 'color':data.secondaryColor }
     const handleEditClick = function (data: Object) {console.log(data)}
+
+    definePageMeta({
+    middleware: 'auth' // this should match the name of the file inside the middleware directory 
+})
 </script>
 
 
