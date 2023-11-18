@@ -4,6 +4,6 @@ export default defineNuxtRouteMiddleware( (to, from) => {
 
         console.log("check profile owner")
         if (username.value !== pathParam) {
-            return navigateTo(`/${username.value}`);
+            return navigateTo(`/${pathParam}`);
         }
 })
