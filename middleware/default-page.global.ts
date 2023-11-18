@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware(to => {
     if (to.path == '/') {
-        return navigateTo('/login')
+        return navigateTo('/sign-up')
       }
   })
