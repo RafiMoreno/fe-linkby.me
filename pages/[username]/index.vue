@@ -1,13 +1,42 @@
 <script setup lang="ts">
     import { Icon } from '@iconify/vue'
 
+    interface Link {
+        id: string,
+        url: string,
+        linkTitle : string,
+        clickCount: string,
+        imageUrl?:string  
+    }
+
+    interface Profile {
+        ID: number,
+        CreatedAt?: string,
+        UpdatedAt?: string,
+        DeletedAt?: null,
+        displayName: string,
+        primaryColor: string
+        secondaryColor: string
+        description: string,
+        displayPicture: string,
+        links?: Link[]
+    }
+
+    interface ProfileResponse {
+        profile: Profile,
+    }
+
     const route = useRoute();
     var username: string | string[] = route.params.username;
-    const data = reactive({
+
+    const { data, pending, error, refresh } = await useFetch<ProfileResponse>(`http://127.0.0.1:8080/api/v1/profile/${username}`)
+
+
+    console.log(`localhost:8080/api/v1/profile/${username}`)
+    console.log("data", data.value)
+    const dummyData: Profile = reactive({
+        'ID':1,
         'displayName': `Display Name ${username}`,
-        'user':{
-            'username': username
-        },
         'primaryColor': '#A44646',
         'secondaryColor': '#EEEEEE',
         'description': "Aenean placerat. In vulputate urna eu arcu. Aliquam erat volutpat. Suspendisse potenti. Morbi mattis felis at nunc. Duis viverra diam non justo. In nisl. Nullam sit amet magna in magna gravida vehicula. Mauris tincidunt sem sed arcu. Nunc posuere. Nullam lectus justo",
@@ -50,26 +79,35 @@
             },
         ]
     }) 
-    const linkBoxStyle = { 'color': data.primaryColor, 'backgroundColor':data.secondaryColor }
-    const pageStyle = { 'backgroundColor': data.primaryColor, 'color':data.secondaryColor }
+
+    if (data.value){
+        data.value!.profile.links = dummyData.links
+    }
+
+
+    const profile = data.value?.profile
+
+
+    
+    const linkBoxStyle = { 'color': profile?.primaryColor ?? '#A44646', 'backgroundColor':profile?.secondaryColor ?? '#FFFFFF' }
+    const pageStyle = { 'backgroundColor': profile?.primaryColor ??'#A44646', 'color':profile?.secondaryColor ?? '#FFFFFF'}
 </script>
 
 
 <template>
     <div :style="pageStyle" class="h-screen overflow-scroll">
-        <div class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto select-none">
-            <!-- <Icon icon="mdi:pencil" /> -->
+        <div v-if="profile != null" class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto  select-none">
             <NuxtImg 
-                v-if="data.displayPicture != undefined && data.displayPicture!=''" 
-                class="object-cover w-[150px] rounded-[50%] aspect-square" 
-                :src="data.displayPicture"
+                v-if="profile.displayPicture != undefined && profile.displayPicture!=''" 
+                class="object-cover w-[150px] rounded-[50%] aspect-square profileImg" 
+                :src="profile.displayPicture"
                 />
-            <b class="text-2xl select-text">{{ data.displayName }}</b>
-            <p class="select-text">{{ data.description }}</p>
+            <b class="text-2xl select-text">{{ profile.displayName }}</b>
+            <p class="select-text">{{ profile.description }}</p>
             <div class="h-[25px]"/>
             <LinkBox 
                 :style="linkBoxStyle" 
-                v-for="link in data.links" 
+                v-for="link in profile.links" 
                 v-bind:key="link.id" 
                 :url="link.url" 
                 :image-url="link.imageUrl"
@@ -77,5 +115,22 @@
                 {{link.linkTitle}}
             </LinkBox>
         </div>
+        <div v-if="error"><ul>
+            <li>
+                {{ error.cause }}
+            </li>
+            <li>
+                {{ error.data }}
+            </li>
+            <li>
+                {{ error.message }}
+            </li>
+        </ul></div>
     </div>
 </template>
+
+<style scoped>
+.profileImg{
+    filter: drop-shadow(0px 6px 4px rgba(0, 0, 0, 0.30));
+}
+</style>
