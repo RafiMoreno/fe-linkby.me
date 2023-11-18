@@ -28,11 +28,11 @@
 
     const route = useRoute();
     var username: string | string[] = route.params.username;
+    var isMyProfile = isProfileOwner(username).value;
 
     const { data, pending, error, refresh } = await useFetch<ProfileResponse>(`http://127.0.0.1:8080/api/v1/profile/${username}`)
 
 
-    console.log(`localhost:8080/api/v1/profile/${username}`)
     console.log("data", data.value)
     const dummyData: Profile = reactive({
         'ID':1,
@@ -96,7 +96,11 @@
 
 <template>
     <div :style="pageStyle" class="h-screen overflow-scroll">
-        <div v-if="profile != null" class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto  select-none">
+        <div class="flex p-2 justify-end">
+            <Icon v-on:click="navigateTo(`${username}/edit`)" v-if="isMyProfile" icon="mdi:pencil-circle" color=pageStyle width="32" class="" />
+        </div>
+        <div v-if="profile != null" class="flex flex-col pt-8 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto  select-none">
+            
             <NuxtImg 
                 v-if="profile.displayPicture != undefined && profile.displayPicture!=''" 
                 class="object-cover w-[150px] rounded-[50%] aspect-square profileImg" 
