@@ -53,8 +53,8 @@
     const handleEditClick = function (data: Object) {console.log(data)}
 
     definePageMeta({
-        middleware: ['auth', 'profile-owner'] // this should match the name of the file inside the middleware directory 
-    })
+    middleware: ['auth', 'profile-owner'] // this should match the name of the file inside the middleware directory 
+})
 </script>
 
 
