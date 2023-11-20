@@ -3,7 +3,7 @@ import { Icon } from '@iconify/vue';
 </script>
 
 <template>
-        <div class="fixed flex flex-col px-6 py-3 bg-white text-black rounded-[30px] top-1/2 left-1/2 gap-3 translate-y-[-50%] translate-x-[-50%] w-[90%] md:w-[80%] lg:w-[60%]">
+        <div class="fixed flex flex-col z-20 px-6 py-3 bg-white text-black rounded-[30px] top-1/2 left-1/2 gap-3 translate-y-[-50%] translate-x-[-50%] w-[90%] md:w-[80%] lg:w-[60%]">
             <Icon @click="$emit('closeEditor')" icon="mingcute:close-fill" color=#A44646 width="24" class="ml-auto" />
             <p class="text-center font-bold text-xl"> Pick your colours </p>
             <div class="flex flex-col gap-1">
