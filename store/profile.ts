@@ -71,8 +71,8 @@ export const useProfileStore = defineStore('profile', {
     profile: null as Profile | null,
     error: null as any,
     errorMessage: "",
-    linkBoxStyle: { 'color': '#A44646', 'backgroundColor': '#FFFFFF' },
-    pageStyle: { 'backgroundColor': '#A44646', 'color': '#FFFFFF'}
+    linkBoxStyle: { 'color': '#A44646', 'backgroundColor': '#FFFFFF', 'borderColor' : '#A44646' },
+    pageStyle: { 'backgroundColor': '#A44646', 'color': '#FFFFFF', 'borderColor' : '#A44646'}
     
 
   }),
@@ -87,8 +87,8 @@ export const useProfileStore = defineStore('profile', {
       if (data.value) {
         this.profile = data.value.profile;
         this.profile.links = dummyData.links
-        this.linkBoxStyle = { 'color': data.value.profile.primaryColor, 'backgroundColor': data.value.profile.secondaryColor }
-        this.pageStyle = { 'backgroundColor': data.value.profile.primaryColor, 'color': data.value.profile.secondaryColor }
+        this.linkBoxStyle = { 'color': data.value.profile.primaryColor, 'backgroundColor': data.value.profile.secondaryColor, 'borderColor' : data.value.profile.primaryColor }
+        this.pageStyle = { 'backgroundColor': data.value.profile.primaryColor, 'color': data.value.profile.secondaryColor, 'borderColor' : data.value.profile.secondaryColor }
         console.log("color", this.pageStyle)
         
       } 

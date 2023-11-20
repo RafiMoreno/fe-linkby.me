@@ -44,7 +44,7 @@
 <style scoped>
 .link-box {
   display: flex;
-  width: 100%;
+  width: 90%;
   height: fit-content;
   min-height: 64;
   padding: 16px;
