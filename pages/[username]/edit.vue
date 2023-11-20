@@ -5,6 +5,7 @@ import { useProfileStore } from "~/store/profile";
 const route = useRoute();
 var username: string | string[] = route.params.username;
 var isColorEditorActive = useState<Boolean>("isColorEditorActive", () => false);
+var isProfileEditorActive = useState<Boolean>("isProfileEditorActive", () => false);
 var isOverlayActive = useState<Boolean>("isOverlayActive", () => false);
 const { loading, profile, error, linkBoxStyle, pageStyle } = storeToRefs(
     useProfileStore()
@@ -27,6 +28,7 @@ definePageMeta({
         <div v-if="isOverlayActive" class="fixed flex bg-[#000000] h-screen w-full opacity-60 justify-center z-20" />
         <ColorEditor v-if="isColorEditorActive"
             @close-editor="isColorEditorActive = !isColorEditorActive; isOverlayActive = !isOverlayActive" />
+        <ProfileEditor v-if="isProfileEditorActive" @close-editor="isProfileEditorActive = !isProfileEditorActive; isOverlayActive = !isOverlayActive"/>
         <div class="flex flex-row p-2">
             <div>
                 <Icon @click="isColorEditorActive = !isColorEditorActive; isOverlayActive = !isOverlayActive"
@@ -51,7 +53,8 @@ definePageMeta({
                 </div>
                 <div :style="pageStyle" class="relative border-[3px] border-solid rounded-[30px] p-2">
                     <Icon :style="pageStyle" icon="mdi:pencil" width="32"
-                        class="absolute right-[-6px] top-[-12px] rounded-2xl border-[2px] bg-origin-padding p-1 transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110 duration-75" />
+                        class="absolute right-[-6px] top-[-12px] rounded-2xl border-[2px] bg-origin-padding p-1 transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110 duration-75" 
+                        @click = "isProfileEditorActive = !isProfileEditorActive; isOverlayActive = !isOverlayActive"/>
                     <b class="text-2xl select-text">{{ profile.displayName }}</b>
                     <p class="select-text">{{ profile.description }}</p>
                 </div>
