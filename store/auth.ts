@@ -38,7 +38,8 @@ export const useAuthStore = defineStore('auth', {
       const { data, pending, error } = await useFetch<LogInResponse>('http://localhost:8080/api/v1/login', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        body: payload
+        body: payload,
+        key: payload.username + payload.password
       });
       console.log("store/auth.ts authenticateUser")
       console.log("response", data.value, "loading", pending.value)
