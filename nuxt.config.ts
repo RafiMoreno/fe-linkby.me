@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
+    'nuxt-snackbar'
   ],
   googleFonts: {
     families: {
@@ -26,4 +27,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     APIBaseUrl: process.env.APIBaseUrl,
   },
+  snackbar: {
+    bottom: true,
+    duration: 5000
+  }
 })

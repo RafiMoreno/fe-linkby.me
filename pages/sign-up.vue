@@ -5,7 +5,8 @@ interface SignUpResponse {
     message: String
 }
 
-const user = ref({
+
+const user = reactive({
   username: '',
   password: '',
   confirm: ''
@@ -13,31 +14,42 @@ const user = ref({
 
 const loading = ref(false)
 const router = useRouter();
+const snackbar = useSnackbar();
 
 const signUp = async () => {
-    if (user.value.password === user.value.confirm){
-        const { data, pending, error } = await useFetch<SignUpResponse>('http://localhost:8080/api/v1/sign-up', {
+    console.log(user)
+    if (user.password === user.confirm){
+        console.log("calling api")
+        const { data, pending, error, refresh } = await useFetch<SignUpResponse>('http://localhost:8080/api/v1/sign-up', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        body: {
-          "username": user.value.username,
-          "password": user.value.password,
-        },
+        body: user,
+        key: user.username
       });
       loading.value = pending.value;
+      console.log("data", data.value)
       if (data.value) {
         console.log(data.value.message)
-        alert(data.value.message)
+        snackbar.add({
+          type: 'success',
+          text: data.value.message
+        })
         router.push("/login")
       }
       else{
-        alert(error.value?.message)
-      }
+        snackbar.add({
+          type: 'error',
+          text: error.value?.data?.error ?? "An error has occured"
+        })
 
     }
-    else {
-        alert("password did not match")
-    }
+  }
+  else {
+    snackbar.add({
+          type: 'error',
+          text: "Password did not match"
+        })
+  }
 }
 </script>
 
