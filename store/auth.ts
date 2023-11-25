@@ -5,11 +5,11 @@ interface UserPayload {
   password: string;
 }
 
-interface LogIn {
+interface LogInResponse {
     token: string
 }
 
-interface Validate {
+interface ValidateResponse {
   message: string,
   username?: string
 }
@@ -35,7 +35,7 @@ export const useAuthStore = defineStore('auth', {
     async authenticateUser(payload: UserPayload) {
       // useFetch from nuxt 3
       // console.log(payload)
-      const { data, pending, error } = await useFetch<LogIn>('http://localhost:8080/api/v1/login', {
+      const { data, pending, error } = await useFetch<LogInResponse>('http://localhost:8080/api/v1/login', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: payload
@@ -66,7 +66,7 @@ export const useAuthStore = defineStore('auth', {
 
     async validateToken(){
       const token = useCookie('token'); 
-      const { data, pending, error } = await useFetch<Validate>('http://localhost:8080/api/v1/validate', {
+      const { data, pending, error } = await useFetch<ValidateResponse>('http://localhost:8080/api/v1/validate', {
         method: 'get',
         headers: { 
           'Content-Type': 'application/json',
