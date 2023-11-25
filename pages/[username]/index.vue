@@ -15,8 +15,7 @@
 
 
 <template>
-    <div> {{ loading }}</div>
-    <div :style="pageStyle" class="h-screen overflow-scroll">
+    <div v-if="!loading" :style="pageStyle" class="h-screen overflow-scroll">
         <div v-if="profile != null" class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto  select-none">
             <NuxtImg 
                 v-if="profile.displayPicture != undefined && profile.displayPicture!=''" 
