@@ -6,7 +6,9 @@ import { useAuthStore } from '~/store/auth'; // import the auth store we just cr
 
 const { authenticateUser } = useAuthStore(); // use authenticateUser action from  auth store
 
-const { authenticated } = storeToRefs(useAuthStore()); 
+const { authenticated, error } = storeToRefs(useAuthStore()); 
+
+const snackbar = useSnackbar();
 
 const user = ref({
   username: '',
@@ -16,10 +18,17 @@ const user = ref({
 const router = useRouter();
 
 const login = async () => {
+  useAuthStore().$reset()
   await authenticateUser(user.value); // call authenticateUser and pass the user object
   // redirect to homepage if user is authenticated
-  if (authenticated) {
+  if (authenticated.value) {
     router.push(`${user.value.username}`);
+  }
+  if (error.value) {
+    snackbar.add({
+    type: 'error',
+    text: error.value.data?.error ?? "Error"
+})
   }
 };
 

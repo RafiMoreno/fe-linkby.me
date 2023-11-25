@@ -14,20 +14,34 @@ interface Validate {
   username?: string
 }
 
+interface ErrorResponse {
+  data?: ErrorResponseData,
+  statusCode: number,
+  statusMessage: string
+}
+
+interface ErrorResponseData {
+  error: string
+}
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     authenticated: false,
     loading: false,
-    username: null as string | null
+    username: null as string | null,
+    error: null as ErrorResponse | null,
   }),
   actions: {
     async authenticateUser(payload: UserPayload) {
       // useFetch from nuxt 3
-      const { data, pending } = await useFetch<LogIn>('http://localhost:8080/api/v1/login', {
+      // console.log(payload)
+      const { data, pending, error } = await useFetch<LogIn>('http://localhost:8080/api/v1/login', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: payload
       });
+      console.log("store/auth.ts authenticateUser")
+      console.log("response", data.value, "loading", pending.value)
       this.loading = pending.value;
       if (data.value) {
         console.log(data)
@@ -37,6 +51,10 @@ export const useAuthStore = defineStore('auth', {
         username.value = payload.username; // set token to cookie
         this.authenticated = true; // set authenticated  state value to true
         this.username = payload.username
+      }
+      else if (error.value){
+        console.log("error", error)
+        this.error = error.value as ErrorResponse
       }
     },
     
