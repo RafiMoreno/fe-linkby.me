@@ -22,13 +22,16 @@ const login = async () => {
   await authenticateUser(user.value); // call authenticateUser and pass the user object
   // redirect to homepage if user is authenticated
   if (authenticated.value) {
+    snackbar.add({
+    type: 'success',
+    text: "Log in successfull"})
     router.push(`${user.value.username}`);
   }
   if (error.value) {
     snackbar.add({
-    type: 'error',
-    text: error.value.data?.error ?? "Error"
-})
+        type: 'error',
+        text: error.value.data?.error ?? "Error"
+    })
   }
 };
 
