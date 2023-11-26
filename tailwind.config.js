@@ -10,15 +10,16 @@ export default {
   ],
   theme: {
     fontFamily: {
-      sans: ['"Nunito"', 'sans-serif']
+      sans: ['"Nunito"', "sans-serif"],
     },
 
-    extend: {    colors: {
-      transparent: 'transparent',
-      current: 'currentColor',
-      'dark-red': '#a44646',
-    }},
+    extend: {
+      colors: {
+        transparent: "transparent",
+        current: "currentColor",
+        "dark-red": "#a44646",
+      },
+    },
   },
   plugins: [],
-}
-
+};
