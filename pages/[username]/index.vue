@@ -2,8 +2,8 @@
 import { Icon } from "@iconify/vue";
 import { useProfileStore } from "~/store/profile";
 const route = useRoute();
-var username: string | string[] = route.params.username;
-var isMyProfile = isProfileOwner(username).value;
+const username: string | string[] = route.params.username;
+const isMyProfile = isProfileOwner(username).value;
 
 // const { data, pending, error, refresh } = await useFetch<ProfileResponse>(`http://127.0.0.1:8080/api/v1/profile/${username}`)
 const { loading, profile, error, linkBoxStyle, pageStyle } =

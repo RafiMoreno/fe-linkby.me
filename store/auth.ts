@@ -14,14 +14,14 @@ interface ValidateResponse {
   username?: string;
 }
 
+interface ErrorResponseData {
+  error: string;
+}
+
 interface ErrorResponse {
   data?: ErrorResponseData;
   statusCode: number;
   statusMessage: string;
-}
-
-interface ErrorResponseData {
-  error: string;
 }
 
 export const useAuthStore = defineStore("auth", {

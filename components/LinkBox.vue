@@ -21,7 +21,7 @@ const props = defineProps({
 });
 
 const handleClick = () => {
-  if (process.browser && props.variant == "default") {
+  if (process.browser && props.variant === "default") {
     window.open(props.url, "_blank").focus();
   }
 };

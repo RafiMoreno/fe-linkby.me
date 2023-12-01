@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
   title: String,
   hintText: String,
   modelValue: undefined,

@@ -19,7 +19,7 @@ const signUp = async () => {
   console.log(user);
   if (user.password === user.confirm) {
     console.log("calling api");
-    const { data, pending, error, refresh } = await useFetch<SignUpResponse>(
+    const { data, pending, error } = await useFetch<SignUpResponse>(
       "http://localhost:8080/api/v1/sign-up",
       {
         method: "post",
@@ -51,7 +51,6 @@ const signUp = async () => {
   }
 };
 </script>
-
 <template>
   <div
     class="container m-auto flex flex-col items-center min-h-screen justify-around"

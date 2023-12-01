@@ -3,13 +3,16 @@ import { Icon } from "@iconify/vue";
 import { useProfileStore } from "~/store/profile";
 
 const route = useRoute();
-var username: string | string[] = route.params.username;
-var isColorEditorActive = useState<Boolean>("isColorEditorActive", () => false);
-var isProfileEditorActive = useState<Boolean>(
+const username: string | string[] = route.params.username;
+const isColorEditorActive = useState<Boolean>(
+  "isColorEditorActive",
+  () => false,
+);
+const isProfileEditorActive = useState<Boolean>(
   "isProfileEditorActive",
   () => false,
 );
-var isOverlayActive = useState<Boolean>("isOverlayActive", () => false);
+const isOverlayActive = useState<Boolean>("isOverlayActive", () => false);
 const { loading, profile, error, linkBoxStyle, pageStyle } =
   storeToRefs(useProfileStore());
 const { fetchProfile } = useProfileStore();
@@ -52,23 +55,23 @@ definePageMeta({
     <div class="flex flex-row p-2">
       <div>
         <Icon
-          @click="
-            isColorEditorActive = !isColorEditorActive;
-            isOverlayActive = !isOverlayActive;
-          "
           icon="material-symbols:palette-outline"
           color="pageStyle"
           width="32"
           class="transition ease-in-out delay-75 hover:-translate-y-[-4px] hover:scale-125 duration-75"
+          @click="
+            isColorEditorActive = !isColorEditorActive;
+            isOverlayActive = !isOverlayActive;
+          "
         />
       </div>
       <div class="ml-auto">
         <Icon
-          v-on:click="navigateTo(``)"
           icon="ic:outline-done"
           color="pageStyle"
           width="32"
           class="transition ease-in-out delay-75 hover:-translate-y-[-4px] hover:scale-125 duration-75"
+          @click="navigateTo(``)"
         />
       </div>
     </div>
@@ -113,10 +116,10 @@ definePageMeta({
       </div>
       <div class="pt-7" />
       <LinkBox
+        v-for="link in profile.links"
+        :key="link.id"
         variant="edit"
         :style="linkBoxStyle"
-        v-for="link in profile.links"
-        v-bind:key="link.id"
         :url="link.url"
         :image-url="link.imageUrl"
         :handle-edit-click="() => handleEditClick(link)"
