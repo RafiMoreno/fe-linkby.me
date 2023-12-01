@@ -35,6 +35,7 @@
                 v-bind:key="link.id" 
                 :url="link.url" 
                 :image-url="link.imageUrl"
+                class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75"
                 >
                 {{link.linkTitle}}
             </LinkBox>

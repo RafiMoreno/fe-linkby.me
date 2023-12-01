@@ -43,7 +43,7 @@ definePageMeta({
         <div v-if="profile != null"
             class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto select-none">
             <div class="text-center w-full">
-                <div class="relative inline-block justify-center mb-[-20px] z-10">
+                <div class="relative inline-block justify-center mb-[-16px] z-10">
                     <Icon :style="pageStyle" icon="mdi:pencil" width="32"
                         class="absolute right-[10px] top-[6px] rounded-2xl border-[2px] bg-origin-padding p-1 z-10 transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110 duration-75" />
                     <NuxtImg v-if="profile.displayPicture != undefined &&
@@ -61,10 +61,10 @@ definePageMeta({
             </div>
             <div class="pt-7" />
             <LinkBox variant="edit" :style="linkBoxStyle" v-for="link in profile.links" v-bind:key="link.id" :url="link.url"
-                :image-url="link.imageUrl" :handle-edit-click="() => handleEditClick(link)" class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75">
+                :image-url="link.imageUrl" :handle-edit-click="() => handleEditClick(link)">
                 {{ link.linkTitle }}
             </LinkBox>
-            <LinkBox variant="create" :style="linkBoxStyle" class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75">
+            <LinkBox variant="create" :style="linkBoxStyle" class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75" >
                 Add New Link
             </LinkBox>
         </div>
