@@ -23,10 +23,11 @@
 <template>
   <div class="link-box" :class="variant" v-bind="$attrs" @click="handleClick">
       <NuxtImg 
-        v-if="imageUrl != undefined && imageUrl!=''" 
+        v-if="variant != 'create' && (imageUrl != undefined && imageUrl!='')" 
         class="object-contain w-[32px] h-[32px]" 
         :src="imageUrl"                 
       />
+      <Icon v-else-if="variant=='create'" icon="ic:outline-add" color="white" width="32" class="" />
       <div v-else class="w-[32px] h-[32px]"/>
 
       <div class="flex-1 font-bold"> <slot/></div>
@@ -44,7 +45,7 @@
 <style scoped>
 .link-box {
   display: flex;
-  width: 100%;
+  width: 90%;
   height: fit-content;
   min-height: 64;
   padding: 16px;
