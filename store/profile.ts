@@ -89,14 +89,14 @@ export const useProfileStore = defineStore("profile", {
     fetchProfile(username: string) {
       // useFetch from nuxt 3
       this.loading = true;
-      const { data, pending, error } = useFetch<ProfileResponse>(
+      const { data, error } = useFetch<ProfileResponse>(
         `http://127.0.0.1:8080/api/v1/profile/${username}`,
         {
           method: "get",
         },
       );
-      this.loading = pending.value;
       if (data.value) {
+        this.loading = false;
         this.profile = data.value.profile;
         this.profile.links = dummyData.links;
         this.linkBoxStyle = {
@@ -111,6 +111,7 @@ export const useProfileStore = defineStore("profile", {
         };
         console.log("color", this.pageStyle);
       } else if (error.value) {
+        this.loading = false;
         console.log("error on fetchProfile", error.value?.message);
         this.error = error.value?.data;
         this.errorMessage = error.value?.message ?? "";

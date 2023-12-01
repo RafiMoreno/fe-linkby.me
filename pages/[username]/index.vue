@@ -2,27 +2,26 @@
 import { Icon } from "@iconify/vue";
 import { useProfileStore } from "~/store/profile";
 const route = useRoute();
-const username: string | string[] = route.params.username;
+const username: string = route.params.username.toString();
 const isMyProfile = isProfileOwner(username).value;
 
 // const { data, pending, error, refresh } = await useFetch<ProfileResponse>(`http://127.0.0.1:8080/api/v1/profile/${username}`)
 const { loading, profile, error, linkBoxStyle, pageStyle } =
   storeToRefs(useProfileStore());
 const { fetchProfile } = useProfileStore();
-fetchProfile(`${username}`);
-console.log(`localhost:8080/api/v1/profile/${username}`);
+fetchProfile(username);
 </script>
 
 <template>
   <div v-if="!loading" :style="pageStyle" class="h-screen overflow-scroll">
     <div class="flex p-2 justify-end">
       <Icon
-        v-on:click="navigateTo(`${username}/edit`)"
         v-if="isMyProfile"
         icon="mdi:pencil-circle"
         color="pageStyle"
         width="32"
         class=""
+        @click="navigateTo(`${username}/edit`)"
       />
     </div>
     <div
@@ -40,9 +39,9 @@ console.log(`localhost:8080/api/v1/profile/${username}`);
       <p class="select-text">{{ profile.description }}</p>
       <div class="h-[25px]" />
       <LinkBox
-        :style="linkBoxStyle"
         v-for="link in profile.links"
-        v-bind:key="link.id"
+        :key="link.id"
+        :style="linkBoxStyle"
         :url="link.url"
         :image-url="link.imageUrl"
       >
