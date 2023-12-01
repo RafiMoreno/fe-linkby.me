@@ -6,9 +6,18 @@ const props = defineProps({
     validators: (value) => ["default", "edit", "view", "add"].includes(value),
     default: "default",
   },
-  url: String,
-  imageUrl: String,
-  handleEditClick: Function,
+  url: {
+    type: String,
+    default: null,
+  },
+  imageUrl: {
+    type: String,
+    default: "",
+  },
+  handleEditClick: {
+    type: Function,
+    default: null,
+  },
 });
 
 const handleClick = () => {
@@ -21,7 +30,7 @@ const handleClick = () => {
 <template>
   <div class="link-box" :class="variant" v-bind="$attrs" @click="handleClick">
     <NuxtImg
-      v-if="variant != 'create' && imageUrl != undefined && imageUrl != ''"
+      v-if="variant != 'create' && imageUrl != ''"
       class="object-contain w-[32px] h-[32px]"
       :src="imageUrl"
     />
