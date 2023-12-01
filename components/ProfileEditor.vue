@@ -27,27 +27,31 @@ interface EditProfileResponse {
 }
 
 interface Validate {
-  message: string,
-  username?: string
+  message: string;
+  username?: string;
 }
 
-const loading = ref(false)
+const loading = ref(false);
 
-const editProfile = async (username : string) => {
-    const token = useCookie('token');
-    const { data, pending, error } = await useFetch<EditProfileResponse>(`http://localhost:8080/api/v1/profile/${username}`, {
-        method: 'put',
-        headers: { 'Content-Type': 'application/json', 'Authorization': token.value ?? '' },
-        body: {
-          "displayName": 'cobain dari fe',
-          "description": 'cobain dari fe',
-        },
-      });
-    loading.value = pending.value;
-    console.log(data.value, error.value)
+const editProfile = async (username: string) => {
+  const token = useCookie("token");
+  const { data, pending, error } = await useFetch<EditProfileResponse>(
+    `http://localhost:8080/api/v1/profile/${username}`,
+    {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token.value ?? "",
+      },
+      body: {
+        displayName: "cobain dari fe",
+        description: "cobain dari fe",
+      },
+    },
+  );
+  loading.value = pending.value;
+  console.log(data.value, error.value);
 };
-
-
 </script>
 
 <template>
