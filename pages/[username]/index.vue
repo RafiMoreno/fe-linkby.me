@@ -57,35 +57,6 @@ fetchLinks(username);
       </ul>
     </div>
   </div>
-  <div
-    v-if="profile != null"
-    class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto select-none"
-  >
-    <NuxtImg
-      v-if="profile.displayPicture != undefined && profile.displayPicture != ''"
-      class="object-cover w-[150px] rounded-[50%] aspect-square profileImg"
-      :src="profile.displayPicture"
-    />
-    <b class="text-2xl select-text">{{ profile.displayName }}</b>
-    <p class="select-text">{{ profile.description }}</p>
-    <div class="h-[25px]" />
-    <LinkBox
-      v-for="link in profile.links"
-      :key="link.id"
-      :style="linkBoxStyle"
-      :url="link.url"
-      :image-url="link.imageUrl"
-    >
-      {{ link.linkTitle }}
-    </LinkBox>
-  </div>
-  <div v-if="error">
-    <ul>
-      <li>
-        {{ error }}
-      </li>
-    </ul>
-  </div>
 </template>
 
 <style scoped>
