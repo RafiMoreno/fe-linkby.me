@@ -16,12 +16,12 @@ fetchLinks(username);
   <div v-if="!loading" :style="pageStyle" class="h-screen overflow-scroll">
     <div class="flex p-2 justify-end">
       <Icon
+        v-on:click="navigateTo(`${username}/edit`)"
         v-if="isMyProfile"
         icon="mdi:pencil-circle"
         color="pageStyle"
         width="32"
         class=""
-        @click="navigateTo(`${username}/edit`)"
       />
     </div>
     <div
@@ -43,6 +43,7 @@ fetchLinks(username);
         :key="link.id"
         :style="linkBoxStyle"
         :url="link.url"
+        class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75"
         :image-url="link.iconUrl"
       >
         {{ link.title }}

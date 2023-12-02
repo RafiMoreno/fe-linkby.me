@@ -49,6 +49,7 @@ definePageMeta({
     />
     <ProfileEditor
       v-if="isProfileEditorActive"
+      :username="username"
       @close-editor="
         isProfileEditorActive = !isProfileEditorActive;
         isOverlayActive = !isOverlayActive;
