@@ -13,8 +13,12 @@ const isProfileEditorActive = useState<Boolean>(
   () => false,
 );
 const isOverlayActive = useState<Boolean>("isOverlayActive", () => false);
+
+const isAddLinkActive = useState<Boolean>("isAddLinkActive", () => false);
+
 const { loading, profile, error, linkBoxStyle, pageStyle } =
   storeToRefs(useProfileStore());
+
 const { fetchProfile } = useProfileStore();
 fetchProfile(`${username}`);
 console.log(`localhost:8080/api/v1/profile/${username}`);
@@ -50,6 +54,13 @@ definePageMeta({
       @close-editor="
         isProfileEditorActive = !isProfileEditorActive;
         isOverlayActive = !isOverlayActive;
+      "
+    />
+    <LinkEditor
+      v-if="isAddLinkActive"
+      @close-editor="
+        isAddLinkActive = false;
+        isOverlayActive = false;
       "
     />
     <div class="flex flex-row p-2">
@@ -131,6 +142,10 @@ definePageMeta({
         variant="create"
         :style="linkBoxStyle"
         class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75"
+        @click="
+          isAddLinkActive = true;
+          isOverlayActive = true;
+        "
       >
         Add New Link
       </LinkBox>
