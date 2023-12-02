@@ -57,13 +57,6 @@ fetchLinks(username);
       </ul>
     </div>
   </div>
-  <div v-if="error">
-    <ul>
-      <li>
-        {{ error }}
-      </li>
-    </ul>
-  </div>
 </template>
 
 <style scoped>
