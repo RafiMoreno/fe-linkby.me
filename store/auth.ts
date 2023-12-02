@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-interface UserPayload {
+interface LoginSubmitPayload {
   username: string;
   password: string;
 }
@@ -14,11 +14,11 @@ interface ValidateResponse {
   username?: string;
 }
 
-interface ErrorResponseData {
+export interface ErrorResponseData {
   error: string;
 }
 
-interface ErrorResponse {
+export interface ErrorResponse {
   data?: ErrorResponseData;
   statusCode: number;
   statusMessage: string;
@@ -32,7 +32,7 @@ export const useAuthStore = defineStore("auth", {
     error: null as ErrorResponse | null,
   }),
   actions: {
-    async authenticateUser(payload: UserPayload) {
+    async authenticateUser(payload: LoginSubmitPayload) {
       // useFetch from nuxt 3
       // console.log(payload)
       const { data, pending, error } = await useFetch<LogInResponse>(

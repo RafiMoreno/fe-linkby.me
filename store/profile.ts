@@ -1,4 +1,11 @@
 import { defineStore } from "pinia";
+import type { ErrorResponse } from "./auth";
+
+export interface LinkSubmitPayload {
+  url: string;
+  title: string;
+  iconUrl?: string;
+}
 
 interface Link {
   id: string;
@@ -6,6 +13,10 @@ interface Link {
   title: string;
   clickCount: string;
   iconUrl?: string;
+}
+
+interface LinkResponse {
+  links: Link[];
 }
 
 interface Profile {
@@ -28,9 +39,8 @@ export const useProfileStore = defineStore("profile", {
   state: () => ({
     loading: false,
     profile: null as Profile | null,
-    error: null as any,
+    error: null as ErrorResponse | null,
     links: [] as Link[],
-    errorMessage: "",
     linkBoxStyle: {
       color: "#A44646",
       backgroundColor: "#FFFFFF",
@@ -43,10 +53,10 @@ export const useProfileStore = defineStore("profile", {
     },
   }),
   actions: {
-    fetchProfile(username: string) {
+    async fetchProfile(username: string) {
       // useFetch from nuxt 3
       this.loading = true;
-      const { data, error } = useFetch<ProfileResponse>(
+      const { data, error } = await useFetch<ProfileResponse>(
         `http://127.0.0.1:8080/api/v1/profile/${username}`,
         {
           method: "get",
@@ -69,28 +79,46 @@ export const useProfileStore = defineStore("profile", {
       } else if (error.value) {
         this.loading = false;
         console.log("error on fetchProfile", error.value?.message);
-        this.error = error.value?.data;
-        this.errorMessage = error.value?.message ?? "";
+        this.error = error.value as ErrorResponse;
       }
     },
-    fetchLinks(username: string) {
+    async fetchLinks(username: string) {
       // useFetch from nuxt 3
       this.loading = true;
-      const { data, error } = useFetch<Link[]>(
+      const { data, error } = await useFetch<Link[]>(
         `http://127.0.0.1:8080/api/v1/profile/${username}/link`,
         {
           method: "get",
         },
       );
       if (data.value) {
-        console.log("fetch links", data.value);
         this.loading = false;
         this.links = data.value;
       } else if (error.value) {
         this.loading = false;
         console.log("error on fetchLinks", error.value?.message);
-        this.error = error.value?.data;
-        this.errorMessage = error.value?.message ?? "";
+        this.error = error.value as ErrorResponse;
+      }
+    },
+    async addLink(payload: LinkSubmitPayload, username: string) {
+      const { data, error } = await useFetch<LinkResponse>(
+        `http://localhost:8080/api/v1/profile/${username}/link`,
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: payload,
+          pick: ["links"] as never[],
+          credentials: "include",
+        },
+      );
+      if (data.value) {
+        this.links = data.value.links;
+
+      } else if (error.value) {
+        console.log("error on fetchLinks", error.value?.message);
+        this.error = error.value as ErrorResponse;
       }
     },
   },
