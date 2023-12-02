@@ -3,7 +3,7 @@ import { Icon } from "@iconify/vue";
 import { useProfileStore } from "~/store/profile";
 
 const route = useRoute();
-const username: string | string[] = route.params.username;
+const username: string = route.params.username.toString();
 const isColorEditorActive = useState<Boolean>(
   "isColorEditorActive",
   () => false,
@@ -16,13 +16,11 @@ const isOverlayActive = useState<Boolean>("isOverlayActive", () => false);
 
 const isAddLinkActive = useState<Boolean>("isAddLinkActive", () => false);
 
-const { loading, profile, error, linkBoxStyle, pageStyle } =
+const { loading, profile, links, error, linkBoxStyle, pageStyle } =
   storeToRefs(useProfileStore());
-
-const { fetchProfile } = useProfileStore();
-fetchProfile(`${username}`);
-console.log(`localhost:8080/api/v1/profile/${username}`);
-console.log(loading.value);
+const { fetchProfile, fetchLinks } = useProfileStore();
+fetchProfile(username);
+fetchLinks(username);
 const handleEditClick = function (data: Object) {
   console.log(data);
 };
@@ -128,16 +126,16 @@ definePageMeta({
       </div>
       <div class="pt-7" />
       <LinkBox
-        v-for="link in profile.links"
+        v-for="link in links"
         :key="link.id"
         variant="edit"
         :style="linkBoxStyle"
         :url="link.url"
-        :image-url="link.imageUrl"
+        :image-url="link.iconUrl"
         :handle-edit-click="() => handleEditClick(link)"
         class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75"
       >
-        {{ link.linkTitle }}
+        {{ link.title }}
       </LinkBox>
       <LinkBox
         variant="create"

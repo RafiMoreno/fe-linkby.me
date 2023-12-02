@@ -1,24 +1,48 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
+import { useProfileStore, type LinkSubmitPayload } from "~/store/profile";
 
-defineEmits(["closeEditor"]);
+const emit = defineEmits(["closeEditor"]);
 
-const link = ref({
+const { addLink } = useProfileStore();
+
+const { error } = storeToRefs(useProfileStore());
+
+const route = useRoute();
+
+const snackbar = useSnackbar();
+
+const username: string = route.params.username.toString();
+
+const linkInput = ref<LinkSubmitPayload>({
   title: "",
   url: "",
   iconUrl: "",
 });
 
 const isFormValid = computed(
-  () => link.value.title !== "" && link.value.url !== "",
+  () => linkInput.value.title !== "" && linkInput.value.url !== "",
 );
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (isFormValid) {
-    console.log("submit", link.value);
+    console.log("submit", linkInput.value);
+    await addLink(linkInput.value, username);
+    if (error.value) {
+      snackbar.add({
+        type: "error",
+        text: error.value.data?.error ?? "Error",
+      });
+    } else {
+      snackbar.add({
+        type: "success",
+        text: "Link added",
+      });
+    }
   } else {
-    console.log("not valid", link);
+    console.log("not valid", linkInput);
   }
+  emit("closeEditor");
 };
 </script>
 
@@ -36,8 +60,8 @@ const handleSubmit = () => {
     />
     <p class="text-center font-bold text-xl">Add a Link</p>
 
-    <TextInput v-model="link.title" title="Title" />
-    <TextInput v-model="link.url" title="URL" />
+    <TextInput v-model="linkInput.title" title="Title" />
+    <TextInput v-model="linkInput.url" title="URL" />
     <Button
       type="submit"
       class="rounded-2xl font-bold text-xl"
