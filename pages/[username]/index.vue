@@ -39,21 +39,12 @@ fetchLinks(username);
       <p class="select-text">{{ profile.description }}</p>
       <div class="h-[25px]" />
       <LinkBox
-<<<<<<< HEAD
-=======
         v-for="link in links"
         :key="link.id"
->>>>>>> 0bf925e46fb9f5ae7a3efccd0ca5f638827e17be
         :style="linkBoxStyle"
-        v-for="link in profile.links"
-        v-bind:key="link.id"
         :url="link.url"
-<<<<<<< HEAD
-        :image-url="link.imageUrl"
         class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75"
-=======
         :image-url="link.iconUrl"
->>>>>>> 0bf925e46fb9f5ae7a3efccd0ca5f638827e17be
       >
         {{ link.title }}
       </LinkBox>
@@ -65,28 +56,6 @@ fetchLinks(username);
         </li>
       </ul>
     </div>
-  </div>
-  <div
-    v-if="profile != null"
-    class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto select-none"
-  >
-    <NuxtImg
-      v-if="profile.displayPicture != undefined && profile.displayPicture != ''"
-      class="object-cover w-[150px] rounded-[50%] aspect-square profileImg"
-      :src="profile.displayPicture"
-    />
-    <b class="text-2xl select-text">{{ profile.displayName }}</b>
-    <p class="select-text">{{ profile.description }}</p>
-    <div class="h-[25px]" />
-    <LinkBox
-      v-for="link in profile.links"
-      :key="link.id"
-      :style="linkBoxStyle"
-      :url="link.url"
-      :image-url="link.imageUrl"
-    >
-      {{ link.linkTitle }}
-    </LinkBox>
   </div>
   <div v-if="error">
     <ul>
