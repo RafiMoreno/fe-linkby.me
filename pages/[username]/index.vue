@@ -5,11 +5,11 @@ const route = useRoute();
 const username: string = route.params.username.toString();
 const isMyProfile = isProfileOwner(username).value;
 
-// const { data, pending, error, refresh } = await useFetch<ProfileResponse>(`http://127.0.0.1:8080/api/v1/profile/${username}`)
-const { loading, profile, error, linkBoxStyle, pageStyle } =
+const { loading, profile, links, error, linkBoxStyle, pageStyle } =
   storeToRefs(useProfileStore());
-const { fetchProfile } = useProfileStore();
+const { fetchProfile, fetchLinks } = useProfileStore();
 fetchProfile(username);
+fetchLinks(username);
 </script>
 
 <template>
@@ -39,14 +39,23 @@ fetchProfile(username);
       <p class="select-text">{{ profile.description }}</p>
       <div class="h-[25px]" />
       <LinkBox
+<<<<<<< HEAD
+=======
+        v-for="link in links"
+        :key="link.id"
+>>>>>>> 0bf925e46fb9f5ae7a3efccd0ca5f638827e17be
         :style="linkBoxStyle"
         v-for="link in profile.links"
         v-bind:key="link.id"
         :url="link.url"
+<<<<<<< HEAD
         :image-url="link.imageUrl"
         class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75"
+=======
+        :image-url="link.iconUrl"
+>>>>>>> 0bf925e46fb9f5ae7a3efccd0ca5f638827e17be
       >
-        {{ link.linkTitle }}
+        {{ link.title }}
       </LinkBox>
     </div>
     <div v-if="error">

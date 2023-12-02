@@ -1,11 +1,22 @@
 import { defineStore } from "pinia";
+import type { ErrorResponse } from "./auth";
+
+export interface LinkSubmitPayload {
+  url: string;
+  title: string;
+  iconUrl?: string;
+}
 
 interface Link {
   id: string;
   url: string;
-  linkTitle: string;
+  title: string;
   clickCount: string;
-  imageUrl?: string;
+  iconUrl?: string;
+}
+
+interface LinkResponse {
+  links: Link[];
 }
 
 interface Profile {
@@ -18,62 +29,18 @@ interface Profile {
   secondaryColor: string;
   description: string;
   displayPicture: string;
-  links?: Link[];
 }
 
 interface ProfileResponse {
   profile: Profile;
 }
 
-const dummyData = {
-  links: [
-    {
-      id: "001",
-      url: "https://www.instagram.com",
-      linkTitle: "Instagram",
-      clickCount: "10",
-      imageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Instagram-Icon.png/900px-Instagram-Icon.png",
-    },
-    {
-      id: "002",
-      url: "https://www.instagram.com",
-      linkTitle: "Instagram",
-      clickCount: "10",
-      imageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Instagram-Icon.png/900px-Instagram-Icon.png",
-    },
-    {
-      id: "003",
-      url: "https://www.instagram.com",
-      linkTitle: "Instagram",
-      clickCount: "10",
-      imageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Instagram-Icon.png/900px-Instagram-Icon.png",
-    },
-    {
-      id: "004",
-      url: "https://www.instagram.com",
-      linkTitle: "Instagram",
-      clickCount: "10",
-      imageUrl: "a",
-    },
-    {
-      id: "005",
-      url: "https://www.instagram.com",
-      linkTitle: "Instagram",
-      clickCount: "10",
-      imageUrl: "",
-    },
-  ],
-};
-
 export const useProfileStore = defineStore("profile", {
   state: () => ({
     loading: false,
     profile: null as Profile | null,
-    error: null as any,
-    errorMessage: "",
+    error: null as ErrorResponse | null,
+    links: [] as Link[],
     linkBoxStyle: {
       color: "#A44646",
       backgroundColor: "#FFFFFF",
@@ -86,10 +53,10 @@ export const useProfileStore = defineStore("profile", {
     },
   }),
   actions: {
-    fetchProfile(username: string) {
+    async fetchProfile(username: string) {
       // useFetch from nuxt 3
       this.loading = true;
-      const { data, error } = useFetch<ProfileResponse>(
+      const { data, error } = await useFetch<ProfileResponse>(
         `http://127.0.0.1:8080/api/v1/profile/${username}`,
         {
           method: "get",
@@ -98,7 +65,6 @@ export const useProfileStore = defineStore("profile", {
       if (data.value) {
         this.loading = false;
         this.profile = data.value.profile;
-        this.profile.links = dummyData.links;
         this.linkBoxStyle = {
           color: data.value.profile.primaryColor,
           backgroundColor: data.value.profile.secondaryColor,
@@ -113,8 +79,46 @@ export const useProfileStore = defineStore("profile", {
       } else if (error.value) {
         this.loading = false;
         console.log("error on fetchProfile", error.value?.message);
-        this.error = error.value?.data;
-        this.errorMessage = error.value?.message ?? "";
+        this.error = error.value as ErrorResponse;
+      }
+    },
+    async fetchLinks(username: string) {
+      // useFetch from nuxt 3
+      this.loading = true;
+      const { data, error } = await useFetch<Link[]>(
+        `http://127.0.0.1:8080/api/v1/profile/${username}/link`,
+        {
+          method: "get",
+        },
+      );
+      if (data.value) {
+        this.loading = false;
+        this.links = data.value;
+      } else if (error.value) {
+        this.loading = false;
+        console.log("error on fetchLinks", error.value?.message);
+        this.error = error.value as ErrorResponse;
+      }
+    },
+    async addLink(payload: LinkSubmitPayload, username: string) {
+      const { data, error } = await useFetch<LinkResponse>(
+        `http://localhost:8080/api/v1/profile/${username}/link`,
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: payload,
+          pick: ["links"] as never[],
+          credentials: "include",
+        },
+      );
+      if (data.value) {
+        this.links = data.value.links;
+
+      } else if (error.value) {
+        console.log("error on fetchLinks", error.value?.message);
+        this.error = error.value as ErrorResponse;
       }
     },
   },
