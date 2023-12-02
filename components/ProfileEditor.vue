@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 
+const props = defineProps<{
+username: string | string[]
+}>()
+
+const input = ref({
+  displayName: "",
+  description: "",
+});
+
+const snackbar = useSnackbar();
+
 interface Link {
   id: string;
   url: string;
@@ -26,32 +37,38 @@ interface EditProfileResponse {
   profile: Profile;
 }
 
-interface Validate {
-  message: string;
-  username?: string;
-}
-
 const loading = ref(false);
 
-const editProfile = async (username: string) => {
-  const token = useCookie("token");
+const editProfile = async (username: string | string[]) => {
   const { data, pending, error } = await useFetch<EditProfileResponse>(
     `http://localhost:8080/api/v1/profile/${username}`,
     {
       method: "put",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token.value ?? "",
       },
-      body: {
-        displayName: "cobain dari fe",
-        description: "cobain dari fe",
-      },
+      body: input,
+      credentials: "include"
     },
   );
   loading.value = pending.value;
-  console.log(data.value, error.value);
+  if(data.value){
+    snackbar.add({
+      type: "success",
+      text: "Succesfully edited your profile",
+    });
+  }
+  if (error.value) {
+    snackbar.add({
+      type: "error",
+      text: error.value.data?.error ?? "Error",
+    });
+  }
 };
+
+const isFormValid = computed(
+  () => input.value.description !== "" || input.value.displayName !== "",
+);
 </script>
 
 <template>
@@ -66,8 +83,8 @@ const editProfile = async (username: string) => {
       class="absolute top-[-4px] right-[-2px] border-[2px] border-[#FFFFFF] bg-[#A44646] rounded-2xl bg-origin-padding p-1 transition ease-in-out delay-75 hover:-translate-x-[-2px] hover:scale-105 duration-75"
     />
     <p class="text-center font-bold text-xl">Edit Profile</p>
-    <TextInput title="Display Name" />
-    <TextInput title="Description" />
-    <Button class="rounded-2xl font-bold text-xl">Save Changes</Button>
+    <TextInput title="Display Name" v-model="input.displayName"/>
+    <TextInput title="Description" v-model="input.description"/>
+    <Button :disabled="!isFormValid" @click="editProfile(props.username)" class="rounded-2xl font-bold text-xl">Save Changes</Button>
   </div>
 </template>
