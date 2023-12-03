@@ -85,7 +85,7 @@ export const useProfileStore = defineStore("profile", {
     async fetchLinks(username: string) {
       // useFetch from nuxt 3
       this.loading = true;
-      const { data, error } = await useFetch<Link[]>(
+      const { data, error } = await useFetch<LinkResponse>(
         `http://127.0.0.1:8080/api/v1/profile/${username}/link`,
         {
           method: "get",
@@ -93,7 +93,7 @@ export const useProfileStore = defineStore("profile", {
       );
       if (data.value) {
         this.loading = false;
-        this.links = data.value;
+        this.links = data.value.links;
       } else if (error.value) {
         this.loading = false;
         console.log("error on fetchLinks", error.value?.message);
@@ -115,7 +115,6 @@ export const useProfileStore = defineStore("profile", {
       );
       if (data.value) {
         this.links = data.value.links;
-
       } else if (error.value) {
         console.log("error on fetchLinks", error.value?.message);
         this.error = error.value as ErrorResponse;
