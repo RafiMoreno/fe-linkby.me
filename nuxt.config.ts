@@ -12,6 +12,9 @@ export default defineNuxtConfig({
     },
   },
   css: ["~/assets/css/main.css"],
+  imports: {
+    dirs: ["types/*.ts", "store/*.ts", "types/**/*.ts"],
+  },
   modules: [
     "@nuxt/image",
     "@nuxtjs/google-fonts",

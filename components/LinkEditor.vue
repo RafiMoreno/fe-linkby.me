@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { useProfileStore, type LinkSubmitPayload } from "~/store/profile";
+import { useProfileStore } from "~/store/profile";
 
 const emit = defineEmits(["closeEditor"]);
 
