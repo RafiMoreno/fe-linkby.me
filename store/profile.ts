@@ -1,39 +1,4 @@
 import { defineStore } from "pinia";
-import type { ErrorResponse } from "./auth";
-
-export interface LinkSubmitPayload {
-  url: string;
-  title: string;
-  iconUrl?: string;
-}
-
-interface Link {
-  id: string;
-  url: string;
-  title: string;
-  clickCount: string;
-  iconUrl?: string;
-}
-
-interface LinkResponse {
-  links: Link[];
-}
-
-interface Profile {
-  ID: number;
-  CreatedAt?: string;
-  UpdatedAt?: string;
-  DeletedAt?: null;
-  displayName: string;
-  primaryColor: string;
-  secondaryColor: string;
-  description: string;
-  displayPicture: string;
-}
-
-interface ProfileResponse {
-  profile: Profile;
-}
 
 export const useProfileStore = defineStore("profile", {
   state: () => ({
