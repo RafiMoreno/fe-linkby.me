@@ -16,7 +16,7 @@ const isOverlayActive = useState<Boolean>("isOverlayActive", () => false);
 
 const isAddLinkActive = useState<Boolean>("isAddLinkActive", () => false);
 
-const { loading, profile, links, error, linkBoxStyle, pageStyle } =
+const { loading, profile, links, error, pageStyle } =
   storeToRefs(useProfileStore());
 const { fetchProfile, fetchLinks } = useProfileStore();
 fetchProfile(username);
@@ -68,7 +68,6 @@ definePageMeta({
           icon="material-symbols:palette-outline"
           color="pageStyle"
           width="32"
-          class="transition ease-in-out delay-75 hover:-translate-y-[-4px] hover:scale-125 duration-75"
           @click="
             isColorEditorActive = !isColorEditorActive;
             isOverlayActive = !isOverlayActive;
@@ -80,7 +79,6 @@ definePageMeta({
           icon="ic:outline-done"
           color="pageStyle"
           width="32"
-          class="transition ease-in-out delay-75 hover:-translate-y-[-4px] hover:scale-125 duration-75"
           @click="navigateTo(``)"
         />
       </div>
@@ -129,7 +127,8 @@ definePageMeta({
         v-for="link in links"
         :key="link.id"
         variant="edit"
-        :style="linkBoxStyle"
+        :primary-color="profile.primaryColor"
+        :secondary-color="profile.secondaryColor"
         :url="link.url"
         :image-url="link.iconUrl"
         :handle-edit-click="() => handleEditClick(link)"
@@ -139,7 +138,8 @@ definePageMeta({
       </LinkBox>
       <LinkBox
         variant="create"
-        :style="linkBoxStyle"
+        :primary-color="profile.primaryColor"
+        :secondary-color="profile.secondaryColor"
         class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75"
         @click="
           isAddLinkActive = true;

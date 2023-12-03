@@ -5,7 +5,7 @@ const route = useRoute();
 const username: string = route.params.username.toString();
 const isMyProfile = isProfileOwner(username).value;
 
-const { loading, profile, links, error, linkBoxStyle, pageStyle } =
+const { loading, profile, links, error, pageStyle } =
   storeToRefs(useProfileStore());
 const { fetchProfile, fetchLinks } = useProfileStore();
 fetchProfile(username);
@@ -16,12 +16,12 @@ fetchLinks(username);
   <div v-if="!loading" :style="pageStyle" class="h-screen overflow-scroll">
     <div class="flex p-2 justify-end">
       <Icon
-        v-on:click="navigateTo(`${username}/edit`)"
         v-if="isMyProfile"
         icon="mdi:pencil-circle"
         color="pageStyle"
         width="32"
         class=""
+        @click="navigateTo(`${username}/edit`)"
       />
     </div>
     <div
@@ -41,10 +41,10 @@ fetchLinks(username);
       <LinkBox
         v-for="link in links"
         :key="link.id"
-        :style="linkBoxStyle"
         :url="link.url"
-        class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75"
         :image-url="link.iconUrl"
+        :primary-color="profile.primaryColor"
+        :secondary-color="profile.secondaryColor"
       >
         {{ link.title }}
       </LinkBox>

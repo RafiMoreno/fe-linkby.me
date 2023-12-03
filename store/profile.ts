@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 
 export const useProfileStore = defineStore("profile", {
-  state: () => ({
+  state: (): ProfileState => ({
     loading: false,
     profile: null as Profile | null,
     error: null as ErrorResponse | null,
@@ -16,6 +16,10 @@ export const useProfileStore = defineStore("profile", {
       color: "#FFFFFF",
       borderColor: "#A44646",
     },
+    theme: {
+      primaryColor: "#A44646",
+      secondaryColor: "#EEEEEE",
+    } as ProfileTheme,
   }),
   actions: {
     async fetchProfile(username: string) {
@@ -40,6 +44,13 @@ export const useProfileStore = defineStore("profile", {
           color: data.value.profile.secondaryColor,
           borderColor: data.value.profile.secondaryColor,
         };
+        // primary color = page background, icon background
+        // secondary color = text, icon
+        this.theme = {
+          primaryColor: data.value.profile.primaryColor,
+          secondaryColor: data.value.profile.secondaryColor,
+        };
+
         console.log("color", this.pageStyle);
       } else if (error.value) {
         this.loading = false;
