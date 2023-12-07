@@ -1,8 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { resolve } from "path";
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
   alias: {
     "@": resolve(__dirname, "/"),
+  },
+  build: {
+    transpile: ['vuetify'],
   },
   devtools: { enabled: true },
   postcss: {
@@ -17,6 +21,12 @@ export default defineNuxtConfig({
     "@nuxtjs/google-fonts",
     "@pinia/nuxt",
     "nuxt-snackbar",
+      (_options, nuxt) => {
+        nuxt.hooks.hook('vite:extendConfig', (config) => {
+          // @ts-expect-error
+          config.plugins.push(vuetify({ autoImport: true }))
+        })
+      },
   ],
   googleFonts: {
     families: {
@@ -29,5 +39,12 @@ export default defineNuxtConfig({
   snackbar: {
     bottom: true,
     duration: 5000,
+  },
+  vite: {
+    vue: {
+      template: {
+        transformAssetUrls,
+      },
+    },
   },
 });

@@ -1,5 +1,17 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
+import { useProfileStore } from "~/store/profile";
+
+const props = defineProps<{
+primaryColor: string,
+secondaryColor: string
+}>()
+
+
+const isColorPrimaryPickerActive = useState<Boolean>("isColorPrimaryPickerActive", ()=> false);
+const isColorSecondaryPickerActive = useState<Boolean>("isColorSecondaryPickerActive", ()=> false);
+const colorPrimary = ref(props.primaryColor)
+const colorSecondary = ref(props.secondaryColor)
 </script>
 
 <template>
@@ -18,15 +30,19 @@ import { Icon } from "@iconify/vue";
       <p class="font-normal text-base">Primary Color</p>
       <div
         class="flex flex-row border border-[#B2B2B2] rounded-2xl p-4 align-middle gap-4 cursor-pointer"
+        @click="isColorPrimaryPickerActive = !isColorPrimaryPickerActive"
       >
         <div
-          class="bg-[#A44646] border border-[#B2B2B2] rounded w-[32px] h-[32px]"
+          class="border border-[#B2B2B2] rounded w-[32px] h-[32px]"
+          :style = "{'background-color': colorPrimary }"
         />
-        <p class="self-center">#A44646</p>
+        <p class="self-center">{{ colorPrimary }}</p>
       </div>
     </div>
+    <v-color-picker v-if="isColorPrimaryPickerActive" v-model="colorPrimary" :modes="['hexa']" elevation="5" class="fixed z-20"/>
     <div class="flex flex-col gap-1">
       <p class="font-normal text-base">Secondary Color</p>
+      <v-color-picker v-if="isColorSecondaryPickerActive" v-model="colorSecondary" :modes="['hexa']" elevation="5" />
       <div
         class="flex flex-row border border-[#B2B2B2] rounded-2xl p-4 align-middle gap-4 cursor-pointer"
       >
@@ -38,4 +54,5 @@ import { Icon } from "@iconify/vue";
     </div>
     <Button class="rounded-2xl font-bold text-xl">Save Changes</Button>
   </div>
+  
 </template>
