@@ -4,8 +4,15 @@ interface LinkSubmitPayload {
   iconUrl?: string;
 }
 
+interface LinkEditPayload {
+  ID: string;
+  url: string;
+  title: string;
+  iconUrl?: string;
+}
+
 interface Link {
-  id: string;
+  ID: string;
   url: string;
   title: string;
   clickCount: string;

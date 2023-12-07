@@ -14,10 +14,6 @@ const props = defineProps({
     type: String,
     default: "",
   },
-  handleEditClick: {
-    type: Function,
-    default: null,
-  },
   primaryColor: {
     type: String,
     default: null,
@@ -62,7 +58,6 @@ const handleClick = () => {
     <div
       v-if="variant == 'edit'"
       class="link-box-icon-button w-[32px] aspect-square rounded-[50%] grid place-items-center link-circle-button"
-      @click="handleEditClick"
     >
       <Icon icon="mdi:pencil" :color="secondaryColor" width="16.8" class="" />
     </div>

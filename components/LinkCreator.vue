@@ -4,14 +4,7 @@ import { useProfileStore } from "~/store/profile";
 
 const emit = defineEmits(["closeEditor"]);
 
-const props = defineProps({
-  link: {
-    type: Object as PropType<Link>,
-    default: () => ({}),
-  },
-});
-
-const { editLink } = useProfileStore();
+const { addLink } = useProfileStore();
 
 const { error } = storeToRefs(useProfileStore());
 
@@ -21,33 +14,35 @@ const snackbar = useSnackbar();
 
 const username: string = route.params.username.toString();
 
-const linkForm = ref<LinkEditPayload>({
-  ID: props.link.ID,
-  title: props.link.title,
-  url: props.link.url,
-  iconUrl: props.link.iconUrl,
+const linkInput = ref<LinkSubmitPayload>({
+  title: "",
+  url: "",
+  iconUrl: "",
 });
 
 const isFormValid = computed(
-  () => linkForm.value.title !== "" && linkForm.value.url !== "",
+  () => linkInput.value.title !== "" && linkInput.value.url !== "",
 );
 
 const handleSubmit = async () => {
   if (isFormValid) {
-    await editLink(linkForm.value, username);
+    console.log("submit", linkInput.value);
+    await addLink(linkInput.value, username);
     if (error.value) {
       snackbar.add({
         type: "error",
-        text: error.value.data?.error ?? "Error while editing link",
+        text: error.value.data?.error ?? "Error",
       });
     } else {
       snackbar.add({
         type: "success",
-        text: "Link edited",
+        text: "Link added",
       });
     }
-    emit("closeEditor");
+  } else {
+    console.log("not valid", linkInput);
   }
+  emit("closeEditor");
 };
 </script>
 
@@ -63,10 +58,10 @@ const handleSubmit = async () => {
       class="absolute top-[-4px] right-[-2px] border-[2px] border-[#FFFFFF] bg-[#A44646] rounded-2xl bg-origin-padding p-1 transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75"
       @click="$emit('closeEditor')"
     />
-    <p class="text-center font-bold text-xl">Edit a Link</p>
+    <p class="text-center font-bold text-xl">Add a Link</p>
 
-    <TextInput v-model="linkForm.title" title="Title" />
-    <TextInput v-model="linkForm.url" title="URL" />
+    <TextInput v-model="linkInput.title" title="Title" />
+    <TextInput v-model="linkInput.url" title="URL" />
     <Button
       type="submit"
       class="rounded-2xl font-bold text-xl"

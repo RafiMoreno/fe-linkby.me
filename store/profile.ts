@@ -92,7 +92,29 @@ export const useProfileStore = defineStore("profile", {
       if (data.value) {
         this.links = data.value.links;
       } else if (error.value) {
-        console.log("error on fetchLinks", error.value?.message);
+        console.log("error on addLink", error.value?.message);
+        this.error = error.value as ErrorResponse;
+      }
+    },
+    async editLink(payload: LinkEditPayload, username: string) {
+      console.log(payload);
+      const { title, url, iconUrl } = payload;
+      const { data, error } = await useFetch<LinkResponse>(
+        `http://localhost:8080/api/v1/profile/${username}/link/${payload.ID}`,
+        {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: { title, url, iconUrl },
+          pick: ["links"] as never[],
+          credentials: "include",
+        },
+      );
+      if (data.value) {
+        this.links = data.value.links;
+      } else if (error.value) {
+        console.log("error on editLinks", error.value?.message);
         this.error = error.value as ErrorResponse;
       }
     },
