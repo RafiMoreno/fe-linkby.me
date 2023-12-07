@@ -97,7 +97,6 @@ export const useProfileStore = defineStore("profile", {
       }
     },
     async editLink(payload: LinkEditPayload, username: string) {
-      console.log(payload);
       const { title, url, iconUrl } = payload;
       const { data, error } = await useFetch<LinkResponse>(
         `http://localhost:8080/api/v1/profile/${username}/link/${payload.ID}`,
