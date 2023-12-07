@@ -1,42 +1,7 @@
 import { defineStore } from "pinia";
-import type { ErrorResponse } from "./auth";
-
-export interface LinkSubmitPayload {
-  url: string;
-  title: string;
-  iconUrl?: string;
-}
-
-interface Link {
-  id: string;
-  url: string;
-  title: string;
-  clickCount: string;
-  iconUrl?: string;
-}
-
-interface LinkResponse {
-  links: Link[];
-}
-
-interface Profile {
-  ID: number;
-  CreatedAt?: string;
-  UpdatedAt?: string;
-  DeletedAt?: null;
-  displayName: string;
-  primaryColor: string;
-  secondaryColor: string;
-  description: string;
-  displayPicture: string;
-}
-
-interface ProfileResponse {
-  profile: Profile;
-}
 
 export const useProfileStore = defineStore("profile", {
-  state: () => ({
+  state: (): ProfileState => ({
     loading: false,
     profile: null as Profile | null,
     error: null as ErrorResponse | null,
@@ -51,6 +16,10 @@ export const useProfileStore = defineStore("profile", {
       color: "#FFFFFF",
       borderColor: "#A44646",
     },
+    theme: {
+      primaryColor: "#A44646",
+      secondaryColor: "#EEEEEE",
+    } as ProfileTheme,
   }),
   actions: {
     async fetchProfile(username: string) {
@@ -75,6 +44,13 @@ export const useProfileStore = defineStore("profile", {
           color: data.value.profile.secondaryColor,
           borderColor: data.value.profile.secondaryColor,
         };
+        // primary color = page background, icon background
+        // secondary color = text, icon
+        this.theme = {
+          primaryColor: data.value.profile.primaryColor,
+          secondaryColor: data.value.profile.secondaryColor,
+        };
+
         console.log("color", this.pageStyle);
       } else if (error.value) {
         this.loading = false;
@@ -85,7 +61,7 @@ export const useProfileStore = defineStore("profile", {
     async fetchLinks(username: string) {
       // useFetch from nuxt 3
       this.loading = true;
-      const { data, error } = await useFetch<Link[]>(
+      const { data, error } = await useFetch<LinkResponse>(
         `http://127.0.0.1:8080/api/v1/profile/${username}/link`,
         {
           method: "get",
@@ -93,7 +69,7 @@ export const useProfileStore = defineStore("profile", {
       );
       if (data.value) {
         this.loading = false;
-        this.links = data.value;
+        this.links = data.value.links;
       } else if (error.value) {
         this.loading = false;
         console.log("error on fetchLinks", error.value?.message);
@@ -115,7 +91,6 @@ export const useProfileStore = defineStore("profile", {
       );
       if (data.value) {
         this.links = data.value.links;
-
       } else if (error.value) {
         console.log("error on fetchLinks", error.value?.message);
         this.error = error.value as ErrorResponse;

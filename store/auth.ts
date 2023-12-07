@@ -1,29 +1,5 @@
 import { defineStore } from "pinia";
 
-interface LoginSubmitPayload {
-  username: string;
-  password: string;
-}
-
-interface LogInResponse {
-  token: string;
-}
-
-interface ValidateResponse {
-  message: string;
-  username?: string;
-}
-
-export interface ErrorResponseData {
-  error: string;
-}
-
-export interface ErrorResponse {
-  data?: ErrorResponseData;
-  statusCode: number;
-  statusMessage: string;
-}
-
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     authenticated: false,
