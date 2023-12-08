@@ -44,6 +44,7 @@ definePageMeta({
       v-if="isColorEditorActive"
       :primary-color="profile ? profile.primaryColor : ''"
       :secondary-color="profile? profile.secondaryColor : ''"
+      :username="username"
       @close-editor="
         isColorEditorActive = !isColorEditorActive;
         isOverlayActive = !isOverlayActive;
