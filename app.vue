@@ -1,7 +1,9 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
 <template>
   <div>
-    <NuxtPage />
+    <v-app>
+      <NuxtPage />
+    </v-app>
   </div>
   <NuxtSnackbar />
 </template>
