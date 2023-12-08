@@ -16,14 +16,24 @@ const isOverlayActive = useState<Boolean>("isOverlayActive", () => false);
 
 const isAddLinkActive = useState<Boolean>("isAddLinkActive", () => false);
 
+const isEditLinkActive = useState<Boolean>("isEditLinkActive", () => false);
+
+const linkEditData = ref<Link>();
+
 const { loading, profile, links, error, pageStyle } =
   storeToRefs(useProfileStore());
+
 const { fetchProfile, fetchLinks } = useProfileStore();
-fetchProfile(username);
-fetchLinks(username);
-const handleEditClick = function (data: Object) {
-  console.log(data);
+
+const handleLinkEdit = (link: Link) => {
+  linkEditData.value = link;
+  isEditLinkActive.value = true;
+  isOverlayActive.value = true;
 };
+
+fetchProfile(username);
+
+fetchLinks(username);
 
 definePageMeta({
   middleware: ["auth", "profile-owner"], // this should match the name of the file inside the middleware directory
@@ -58,10 +68,18 @@ definePageMeta({
         isOverlayActive = !isOverlayActive;
       "
     />
-    <LinkEditor
+    <LinkCreator
       v-if="isAddLinkActive"
       @close-editor="
         isAddLinkActive = false;
+        isOverlayActive = false;
+      "
+    />
+    <LinkEditor
+      v-if="isEditLinkActive"
+      :link="linkEditData"
+      @close-editor="
+        isEditLinkActive = false;
         isOverlayActive = false;
       "
     />
@@ -134,8 +152,7 @@ definePageMeta({
         :secondary-color="profile.secondaryColor"
         :url="link.url"
         :image-url="link.iconUrl"
-        :handle-edit-click="() => handleEditClick(link)"
-        class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75"
+        @click="() => handleLinkEdit(link)"
       >
         {{ link.title }}
       </LinkBox>
@@ -143,7 +160,6 @@ definePageMeta({
         variant="create"
         :primary-color="profile.primaryColor"
         :secondary-color="profile.secondaryColor"
-        class="transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-105 duration-75"
         @click="
           isAddLinkActive = true;
           isOverlayActive = true;
