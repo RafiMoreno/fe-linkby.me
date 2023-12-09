@@ -50,8 +50,6 @@ export const useProfileStore = defineStore("profile", {
           primaryColor: data.value.profile.primaryColor,
           secondaryColor: data.value.profile.secondaryColor,
         };
-
-        console.log("color", this.pageStyle);
       } else if (error.value) {
         this.loading = false;
         console.log("error on fetchProfile", error.value?.message);
@@ -73,6 +71,39 @@ export const useProfileStore = defineStore("profile", {
       } else if (error.value) {
         this.loading = false;
         console.log("error on fetchLinks", error.value?.message);
+        this.error = error.value as ErrorResponse;
+      }
+    },
+    async editProfile(payload : ProfileEditPayload, username: string ) {
+      const { data, error } = await useFetch<ProfileResponse>(
+        `http://localhost:8080/api/v1/profile/${username}`,
+        {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: payload,
+          credentials: "include",
+        },
+      );
+      if (data.value) {
+        this.profile = data.value.profile;
+        this.linkBoxStyle = {
+          color: data.value.profile.primaryColor,
+          backgroundColor: data.value.profile.secondaryColor,
+          borderColor: data.value.profile.primaryColor,
+        };
+        this.pageStyle = {
+          backgroundColor: data.value.profile.primaryColor,
+          color: data.value.profile.secondaryColor,
+          borderColor: data.value.profile.secondaryColor,
+        };
+        this.theme = {
+          primaryColor: data.value.profile.primaryColor,
+          secondaryColor: data.value.profile.secondaryColor,
+        };
+      }
+      if (error.value) {
         this.error = error.value as ErrorResponse;
       }
     },
