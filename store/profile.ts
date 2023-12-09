@@ -148,5 +148,21 @@ export const useProfileStore = defineStore("profile", {
         this.error = error.value as ErrorResponse;
       }
     },
+    async deleteLink(linkID: string, username: string) {
+      const { data, error } = await useFetch<LinkResponse>(
+        `http://localhost:8080/api/v1/profile/${username}/link/${linkID}`,
+        {
+          method: "delete",
+          pick: ["links"] as never[],
+          credentials: "include",
+        },
+      );
+      if (data.value) {
+        this.links = data.value.links;
+      } else if (error.value) {
+        console.log("error on errorLinks", error.value?.message);
+        this.error = error.value as ErrorResponse;
+      }
+    },
   },
 });

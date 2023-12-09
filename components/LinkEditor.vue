@@ -11,7 +11,7 @@ const props = defineProps({
   },
 });
 
-const { editLink } = useProfileStore();
+const { editLink, deleteLink } = useProfileStore();
 
 const { error } = storeToRefs(useProfileStore());
 
@@ -49,6 +49,22 @@ const handleSubmit = async () => {
     emit("closeEditor");
   }
 };
+
+const handleDelete = async () => {
+  await deleteLink(props.link.ID, username);
+  if (error.value) {
+    snackbar.add({
+      type: "error",
+      text: error.value.data?.error ?? "Error while deleting link",
+    });
+  } else {
+    snackbar.add({
+      type: "success",
+      text: "Link deleted",
+    });
+  }
+  emit("closeEditor");
+};
 </script>
 
 <template>
@@ -67,11 +83,20 @@ const handleSubmit = async () => {
 
     <TextInput v-model="linkForm.title" title="Title" />
     <TextInput v-model="linkForm.url" title="URL" />
-    <Button
-      type="submit"
-      class="rounded-2xl font-bold text-xl"
-      :disabled="!isFormValid"
-      >Add</Button
-    >
+    <div class="flex row-auto gap-2">
+      <Button
+        type="button"
+        variant="outline"
+        class="rounded-2xl font-bold text-xl"
+        @click.prevent="handleDelete"
+        >Delete
+      </Button>
+      <Button
+        type="submit"
+        class="rounded-2xl font-bold text-xl"
+        :disabled="!isFormValid"
+        >Add
+      </Button>
+    </div>
   </form>
 </template>
