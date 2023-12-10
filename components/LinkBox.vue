@@ -47,7 +47,7 @@ const handleClick = () => {
     <Icon
       v-else-if="variant == 'create'"
       icon="ic:outline-add"
-      :color="secondaryColor"
+      :color="primaryColor"
       width="32"
       class=""
     />

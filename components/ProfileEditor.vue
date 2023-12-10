@@ -54,7 +54,7 @@ const handleSubmit = async () => {
     />
     <p class="text-center font-bold text-xl">Edit Profile</p>
     <TextInput title="Display Name" v-model="input.displayName" />
-    <TextInput title="Description" v-model="input.description" />
+    <LargeTextInput title="Description" v-model="input.description" />
     <Button
       :disabled="!isFormValid"
       @click="handleSubmit"

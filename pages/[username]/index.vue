@@ -13,7 +13,7 @@ fetchLinks(username);
 </script>
 
 <template>
-  <div v-if="!loading" :style="pageStyle" class="h-screen overflow-scroll">
+  <div v-if="!loading" :style="pageStyle" class="h-full overflow-hidden">
     <div class="flex p-2 justify-end">
       <Icon
         v-if="isMyProfile"
@@ -26,7 +26,7 @@ fetchLinks(username);
     </div>
     <div
       v-if="profile != null"
-      class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto select-none"
+      class="flex flex-col pt-12 pb-6 px-[12px] max-w-[700px] items-center mx-auto select-none"
     >
       <NuxtImg
         v-if="
@@ -37,16 +37,18 @@ fetchLinks(username);
       />
       <b class="text-2xl select-text">{{ profile.displayName }}</b>
       <p class="select-text">{{ profile.description }}</p>
-      <div class="h-[25px]" />
-      <LinkBox
+      <div class="pt-14" />
+      <div class="flex flex-col gap-[12px] w-full items-center">
+        <LinkBox
         v-for="link in links"
         :key="link.ID"
         :link="link"
         :primary-color="profile.primaryColor"
         :secondary-color="profile.secondaryColor"
       >
-        {{ link.title }}
-      </LinkBox>
+          {{ link.title }}
+        </LinkBox>
+      </div>
     </div>
     <div v-if="error">
       <ul>

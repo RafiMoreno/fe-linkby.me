@@ -44,7 +44,7 @@ definePageMeta({
   <div
     v-if="!loading"
     :style="pageStyle"
-    class="relative h-screen overflow-auto"
+    class="relative h-full overflow-hidden"
   >
     <div
       v-if="isOverlayActive"
@@ -108,7 +108,7 @@ definePageMeta({
     </div>
     <div
       v-if="profile != null"
-      class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto select-none"
+      class="flex flex-col pt-12 pb-6 px-[12px] max-w-[700px] items-center gap-[12px] mx-auto select-none"
     >
       <div class="text-center w-full">
         <div class="relative inline-block justify-center mb-[-20px] z-10">
