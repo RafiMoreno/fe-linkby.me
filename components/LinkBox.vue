@@ -41,6 +41,7 @@ const handleClick = () => {
     <Icon
       v-if="variant != 'create' && link.iconUrl != '' && link != undefined"
       :icon="link.iconUrl!"
+      :color="link.iconColor"
       class="object-contain w-[32px] h-[32px]"
     />
     <Icon

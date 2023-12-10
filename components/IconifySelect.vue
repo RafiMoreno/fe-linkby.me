@@ -61,7 +61,7 @@ function handleIconSelect(icon: string) {
         <div
           class="border border-[#B2B2B2] rounded w-[32px] h-[32px] cursor-pointer"
           :style="{ 'background-color': iconSearchInput.color }"
-          @click="isColorPickerActive = !isColorPickerActive"
+          @click.stop="isColorPickerActive = !isColorPickerActive"
         >
           <v-color-picker
             v-if="isColorPickerActive"

@@ -128,7 +128,6 @@ export const useProfileStore = defineStore("profile", {
       }
     },
     async editLink(payload: LinkEditPayload, username: string) {
-      const { title, url, iconUrl } = payload;
       const { data, error } = await useFetch<LinkResponse>(
         `http://localhost:8080/api/v1/profile/${username}/link/${payload.ID}`,
         {
@@ -136,7 +135,7 @@ export const useProfileStore = defineStore("profile", {
           headers: {
             "Content-Type": "application/json",
           },
-          body: { title, url, iconUrl },
+          body: payload,
           pick: ["links"] as never[],
           credentials: "include",
         },
