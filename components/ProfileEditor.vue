@@ -43,7 +43,7 @@ const handleSubmit = async () => {
 
 <template>
   <div
-    class="fixed flex flex-col z-20 px-3 py-6 bg-white text-black rounded-[30px] top-1/2 left-1/2 gap-3 translate-y-[-60%] translate-x-[-50%] w-[90%] md:w-[50%] lg:w-[30%]"
+    class="fixed flex flex-col z-20 px-3 py-6 bg-white text-black rounded-[30px] top-1/2 left-1/2 gap-3 translate-y-[-50%] translate-x-[-50%] w-[90%] md:w-[50%] lg:w-[30%]"
   >
     <Icon
       @click="$emit('closeEditor')"
@@ -54,7 +54,7 @@ const handleSubmit = async () => {
     />
     <p class="text-center font-bold text-xl">Edit Profile</p>
     <TextInput title="Display Name" v-model="input.displayName" />
-    <TextInput title="Description" v-model="input.description" />
+    <LargeTextInput title="Description" v-model="input.description" />
     <Button
       :disabled="!isFormValid"
       @click="handleSubmit"
