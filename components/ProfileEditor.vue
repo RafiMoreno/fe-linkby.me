@@ -1,74 +1,44 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 
+const emit = defineEmits(["closeEditor"]);
+
 const props = defineProps<{
   username: string | string[];
+  displayName: string;
+  description: string;
 }>();
 
-const input = ref({
-  displayName: "",
-  description: "",
+const input = ref<ProfileEditPayload>({
+  displayName: props.displayName,
+  description: props.description,
 });
 
 const snackbar = useSnackbar();
-
-interface Link {
-  id: string;
-  url: string;
-  linkTitle: string;
-  clickCount: string;
-  imageUrl?: string;
-}
-
-interface Profile {
-  ID: number;
-  CreatedAt?: string;
-  UpdatedAt?: string;
-  DeletedAt?: null;
-  displayName: string;
-  primaryColor: string;
-  secondaryColor: string;
-  description: string;
-  displayPicture: string;
-  links?: Link[];
-}
-
-interface EditProfileResponse {
-  profile: Profile;
-}
-
-const loading = ref(false);
-
-const editProfile = async (username: string | string[]) => {
-  const { data, pending, error } = await useFetch<EditProfileResponse>(
-    `http://localhost:8080/api/v1/profile/${username}`,
-    {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: input,
-      credentials: "include",
-    },
-  );
-  loading.value = pending.value;
-  if (data.value) {
-    snackbar.add({
-      type: "success",
-      text: "Succesfully edited your profile",
-    });
-  }
-  if (error.value) {
-    snackbar.add({
-      type: "error",
-      text: error.value.data?.error ?? "Error",
-    });
-  }
-};
+const { editProfile } = useProfileStore();
+const { error } = storeToRefs(useProfileStore());
 
 const isFormValid = computed(
   () => input.value.description !== "" || input.value.displayName !== "",
 );
+
+const handleSubmit = async () => {
+  if (isFormValid) {
+    await editProfile(input.value, props.username);
+    if (error.value) {
+      snackbar.add({
+        type: "error",
+        text: error.value.data?.error ?? "Error while editing profile",
+      });
+    } else {
+      snackbar.add({
+        type: "success",
+        text: "Profile edited",
+      });
+    }
+    emit("closeEditor");
+  }
+};
 </script>
 
 <template>
@@ -87,7 +57,7 @@ const isFormValid = computed(
     <TextInput title="Description" v-model="input.description" />
     <Button
       :disabled="!isFormValid"
-      @click="editProfile(props.username)"
+      @click="handleSubmit"
       class="rounded-2xl font-bold text-xl"
       >Save Changes</Button
     >
