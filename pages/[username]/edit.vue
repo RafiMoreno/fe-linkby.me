@@ -53,7 +53,7 @@ definePageMeta({
     <ColorEditor
       v-if="isColorEditorActive"
       :primary-color="profile ? profile.primaryColor : ''"
-      :secondary-color="profile? profile.secondaryColor : ''"
+      :secondary-color="profile ? profile.secondaryColor : ''"
       :username="username"
       @close-editor="
         isColorEditorActive = !isColorEditorActive;
@@ -148,12 +148,11 @@ definePageMeta({
       <div class="pt-7" />
       <LinkBox
         v-for="link in links"
-        :key="link.id"
+        :key="link.ID"
+        :link="link"
         variant="edit"
         :primary-color="profile.primaryColor"
         :secondary-color="profile.secondaryColor"
-        :url="link.url"
-        :image-url="link.iconUrl"
         @click="() => handleLinkEdit(link)"
       >
         {{ link.title }}

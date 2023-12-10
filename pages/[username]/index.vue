@@ -40,13 +40,12 @@ fetchLinks(username);
       <div class="pt-14" />
       <div class="flex flex-col gap-[12px] w-full items-center">
         <LinkBox
-          v-for="link in links"
-          :key="link.id"
-          :url="link.url"
-          :image-url="link.iconUrl"
-          :primary-color="profile.primaryColor"
-          :secondary-color="profile.secondaryColor"
-        >
+        v-for="link in links"
+        :key="link.ID"
+        :link="link"
+        :primary-color="profile.primaryColor"
+        :secondary-color="profile.secondaryColor"
+      >
           {{ link.title }}
         </LinkBox>
       </div>

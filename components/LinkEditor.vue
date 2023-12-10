@@ -26,6 +26,7 @@ const linkForm = ref<LinkEditPayload>({
   title: props.link.title,
   url: props.link.url,
   iconUrl: props.link.iconUrl,
+  iconColor: props.link.iconColor,
 });
 
 const isFormValid = computed(
@@ -33,6 +34,7 @@ const isFormValid = computed(
 );
 
 const handleSubmit = async () => {
+  console.log("link submit payload", linkForm.value);
   if (isFormValid) {
     await editLink(linkForm.value, username);
     if (error.value) {
@@ -65,6 +67,11 @@ const handleDelete = async () => {
   }
   emit("closeEditor");
 };
+
+const handleIconSelect = (icon: IconInput) => {
+  linkForm.value.iconColor = icon.color;
+  linkForm.value.iconUrl = icon.name;
+};
 </script>
 
 <template>
@@ -83,7 +90,8 @@ const handleDelete = async () => {
 
     <TextInput v-model="linkForm.title" title="Title" />
     <TextInput v-model="linkForm.url" title="URL" />
-    <div class="flex row-auto gap-2">
+    <IconifySelect class="font-bold" @on-icon-select="handleIconSelect" />
+    <div type="button" class="flex flex-col-reverse sm:flex-row gap-2">
       <Button
         type="button"
         variant="outline"
@@ -95,7 +103,7 @@ const handleDelete = async () => {
         type="submit"
         class="rounded-2xl font-bold text-xl"
         :disabled="!isFormValid"
-        >Add
+        >Save
       </Button>
     </div>
   </form>

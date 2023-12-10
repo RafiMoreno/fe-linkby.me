@@ -74,7 +74,7 @@ export const useProfileStore = defineStore("profile", {
         this.error = error.value as ErrorResponse;
       }
     },
-    async editProfile(payload : ProfileEditPayload, username: string ) {
+    async editProfile(payload: ProfileEditPayload, username: string) {
       const { data, error } = await useFetch<ProfileResponse>(
         `http://localhost:8080/api/v1/profile/${username}`,
         {
@@ -160,7 +160,7 @@ export const useProfileStore = defineStore("profile", {
       if (data.value) {
         this.links = data.value.links;
       } else if (error.value) {
-        console.log("error on errorLinks", error.value?.message);
+        console.log("error on dSeleteLinks", error.value?.message);
         this.error = error.value as ErrorResponse;
       }
     },

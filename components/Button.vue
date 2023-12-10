@@ -15,7 +15,7 @@ defineProps({
     v-bind="$attrs"
     :disabled="disabled"
     :class="variant"
-    class="w-full rounded-xl h-12"
+    class="w-full rounded-xl h-12 font-bold"
     @click="onClick"
   >
     <slot />
@@ -31,6 +31,7 @@ defineProps({
 .outline {
   background-color: #ffffff;
   color: #a44646;
+  border: 1px solid #dddddd;
 }
 
 button:disabled {
@@ -39,6 +40,6 @@ button:disabled {
 }
 
 button:hover:enabled {
-  filter: brightness(80%);
+  filter: brightness(95%);
 }
 </style>
