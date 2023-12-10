@@ -63,6 +63,8 @@ definePageMeta({
     <ProfileEditor
       v-if="isProfileEditorActive"
       :username="username"
+      :display-name="profile ? profile.displayName : ''"
+      :description="profile ? profile.description: ''"
       @close-editor="
         isProfileEditorActive = !isProfileEditorActive;
         isOverlayActive = !isOverlayActive;
