@@ -10,6 +10,14 @@ interface Profile {
   displayPicture: string;
 }
 
+interface ProfileEditPayload {
+  displayName: string;
+  primaryColor: string;
+  secondaryColor: string;
+  description: string;
+  displayPicture: string;
+}
+
 interface ProfileResponse {
   profile: Profile;
 }

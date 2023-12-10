@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 
+const emit = defineEmits(["closeEditor"]);
+
 const props = defineProps<{
   primaryColor: string;
   secondaryColor: string;
@@ -8,6 +10,8 @@ const props = defineProps<{
 }>();
 
 const snackbar = useSnackbar();
+const { editProfile } = useProfileStore();
+const { error } = storeToRefs(useProfileStore());
 
 const isColorPrimaryPickerActive = useState<Boolean>(
   "isColorPrimaryPickerActive",
@@ -17,64 +21,26 @@ const isColorSecondaryPickerActive = useState<Boolean>(
   "isColorSecondaryPickerActive",
   () => false,
 );
-const colorPrimary = ref(props.primaryColor);
-const colorSecondary = ref(props.secondaryColor);
 
-interface Link {
-  id: string;
-  url: string;
-  linkTitle: string;
-  clickCount: string;
-  imageUrl?: string;
-}
+const themeInput = ref<ProfileEditPayload>({
+  primaryColor: props.primaryColor,
+  secondaryColor: props.secondaryColor,
+});
 
-interface Profile {
-  ID: number;
-  CreatedAt?: string;
-  UpdatedAt?: string;
-  DeletedAt?: null;
-  displayName: string;
-  primaryColor: string;
-  secondaryColor: string;
-  description: string;
-  displayPicture: string;
-  links?: Link[];
-}
-
-interface EditProfileResponse {
-  profile: Profile;
-}
-
-const loading = ref(false);
-
-const editColor = async (username: string | string[]) => {
-  const { data, pending, error } = await useFetch<EditProfileResponse>(
-    `http://localhost:8080/api/v1/profile/${username}`,
-    {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: {
-        primaryColor: colorPrimary.value,
-        secondaryColor: colorSecondary.value,
-      },
-      credentials: "include",
-    },
-  );
-  loading.value = pending.value;
-  if (data.value) {
-    snackbar.add({
-      type: "success",
-      text: "Succesfully edited your profile",
-    });
-  }
+const handleSubmit = async () => {
+  await editProfile(themeInput.value, props.username);
   if (error.value) {
     snackbar.add({
       type: "error",
-      text: error.value.data?.error ?? "Error",
+      text: error.value.data?.error ?? "Error while editing profile theme",
+    });
+  } else {
+    snackbar.add({
+      type: "success",
+      text: "Profile theme edited",
     });
   }
+  emit("closeEditor");
 };
 </script>
 
@@ -103,13 +69,13 @@ const editColor = async (username: string | string[]) => {
       >
         <div
           class="border border-[#B2B2B2] rounded w-[32px] h-[32px]"
-          :style="{ 'background-color': colorPrimary }"
+          :style="{ 'background-color': themeInput.primaryColor }"
         />
-        <p class="self-center">{{ colorPrimary }}</p>
+        <p class="self-center">{{ themeInput.primaryColor }}</p>
       </div>
       <v-color-picker
         v-if="isColorPrimaryPickerActive"
-        v-model="colorPrimary"
+        v-model="themeInput.primaryColor"
         hide-inputs
         :modes="['hexa']"
         elevation="5"
@@ -131,12 +97,12 @@ const editColor = async (username: string | string[]) => {
       >
         <div
           class="border border-[#B2B2B2] rounded w-[32px] h-[32px]"
-          :style="{ 'background-color': colorSecondary }"
+          :style="{ 'background-color': themeInput.secondaryColor }"
         />
-        <p class="self-center">{{ colorSecondary }}</p>
+        <p class="self-center">{{ themeInput.secondaryColor }}</p>
         <v-color-picker
           v-if="isColorSecondaryPickerActive"
-          v-model="colorSecondary"
+          v-model="themeInput.secondaryColor"
           hide-inputs
           :modes="['hexa']"
           elevation="5"
@@ -145,7 +111,7 @@ const editColor = async (username: string | string[]) => {
         />
       </div>
     </div>
-    <Button class="rounded-2xl font-bold text-xl" @click="editColor(username)"
+    <Button class="rounded-2xl font-bold text-xl" @click="handleSubmit"
       >Save Changes</Button
     >
   </div>
