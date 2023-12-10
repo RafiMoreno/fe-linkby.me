@@ -2,17 +2,23 @@
 import { Icon } from "@iconify/vue";
 
 const props = defineProps<{
-  primaryColor: string,
-  secondaryColor: string,
+  primaryColor: string;
+  secondaryColor: string;
   username: string | string[];
-}>()
+}>();
 
 const snackbar = useSnackbar();
 
-const isColorPrimaryPickerActive = useState<Boolean>("isColorPrimaryPickerActive", ()=> false);
-const isColorSecondaryPickerActive = useState<Boolean>("isColorSecondaryPickerActive", ()=> false);
-const colorPrimary = ref(props.primaryColor)
-const colorSecondary = ref(props.secondaryColor)
+const isColorPrimaryPickerActive = useState<Boolean>(
+  "isColorPrimaryPickerActive",
+  () => false,
+);
+const isColorSecondaryPickerActive = useState<Boolean>(
+  "isColorSecondaryPickerActive",
+  () => false,
+);
+const colorPrimary = ref(props.primaryColor);
+const colorSecondary = ref(props.secondaryColor);
 
 interface Link {
   id: string;
@@ -50,8 +56,8 @@ const editColor = async (username: string | string[]) => {
         "Content-Type": "application/json",
       },
       body: {
-        "primaryColor" : colorPrimary.value,
-        "secondaryColor" : colorSecondary.value
+        primaryColor: colorPrimary.value,
+        secondaryColor: colorSecondary.value,
       },
       credentials: "include",
     },
@@ -77,49 +83,70 @@ const editColor = async (username: string | string[]) => {
     class="fixed flex flex-col z-20 px-6 py-3 bg-white text-black rounded-[30px] top-1/2 left-1/2 gap-3 translate-y-[-60%] translate-x-[-50%] w-[90%] md:w-[50%] lg:w-[40%]"
   >
     <Icon
-      @click="$emit('closeEditor')"
       icon="mingcute:close-fill"
       color="#FFFFFF"
       width="30"
       class="absolute top-[-4px] right-[-2px] border-[2px] border-[#FFFFFF] bg-[#A44646] rounded-2xl bg-origin-padding p-1 transition ease-in-out delay-75 hover:-translate-x-[-2px] hover:scale-105 duration-75"
+      @click="$emit('closeEditor')"
     />
     <p class="text-center font-bold text-xl">Edit Theme</p>
     <div class="flex flex-col gap-1">
       <p class="font-normal text-base">Primary Color</p>
       <div
         class="flex flex-row border border-[#B2B2B2] rounded-2xl p-4 align-middle gap-4 cursor-pointer"
-        @click="isColorPrimaryPickerActive = !isColorPrimaryPickerActive;
-        isColorSecondaryPickerActive ? isColorSecondaryPickerActive = !isColorSecondaryPickerActive : null"
+        @click="
+          isColorPrimaryPickerActive = !isColorPrimaryPickerActive;
+          isColorSecondaryPickerActive
+            ? (isColorSecondaryPickerActive = !isColorSecondaryPickerActive)
+            : null;
+        "
       >
         <div
           class="border border-[#B2B2B2] rounded w-[32px] h-[32px]"
-          :style = "{'background-color': colorPrimary }"
+          :style="{ 'background-color': colorPrimary }"
         />
         <p class="self-center">{{ colorPrimary }}</p>
       </div>
-      <v-color-picker hide-inputs v-if="isColorPrimaryPickerActive" v-model="colorPrimary" :modes="['hexa']" elevation="5" 
-      class="fixed z-20 top-[146px] left-10" 
-      style="width : 75%; height: 75%;"/>
+      <v-color-picker
+        v-if="isColorPrimaryPickerActive"
+        v-model="colorPrimary"
+        hide-inputs
+        :modes="['hexa']"
+        elevation="5"
+        class="fixed z-20 top-[146px] left-10"
+        style="width: 75%; height: 75%"
+      />
     </div>
-    
+
     <div class="flex flex-col gap-1">
       <p class="font-normal text-base">Secondary Color</p>
       <div
         class="flex flex-row border border-[#B2B2B2] rounded-2xl p-4 align-middle gap-4 cursor-pointer"
-        @click="isColorSecondaryPickerActive = !isColorSecondaryPickerActive; 
-        isColorPrimaryPickerActive ? isColorPrimaryPickerActive = !isColorPrimaryPickerActive : null"
+        @click="
+          isColorSecondaryPickerActive = !isColorSecondaryPickerActive;
+          isColorPrimaryPickerActive
+            ? (isColorPrimaryPickerActive = !isColorPrimaryPickerActive)
+            : null;
+        "
       >
         <div
           class="border border-[#B2B2B2] rounded w-[32px] h-[32px]"
-          :style = "{'background-color': colorSecondary }"
+          :style="{ 'background-color': colorSecondary }"
         />
         <p class="self-center">{{ colorSecondary }}</p>
-        <v-color-picker hide-inputs v-if="isColorSecondaryPickerActive" v-model="colorSecondary" :modes="['hexa']" elevation="5" 
-        class="fixed z-20 top-[252px]" 
-        style="width : 75%; height: 75%;"/>
+        <v-color-picker
+          v-if="isColorSecondaryPickerActive"
+          v-model="colorSecondary"
+          hide-inputs
+          :modes="['hexa']"
+          elevation="5"
+          class="fixed z-20 top-[252px]"
+          style="width: 75%; height: 75%"
+        />
       </div>
     </div>
-    <Button @click="editColor(username)" class="rounded-2xl font-bold text-xl">Save Changes</Button>
+    <Button class="rounded-2xl font-bold text-xl" @click="editColor(username)"
+      >Save Changes</Button
+    >
   </div>
-  
 </template>

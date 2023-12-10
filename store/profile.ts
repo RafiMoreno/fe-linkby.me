@@ -51,7 +51,6 @@ export const useProfileStore = defineStore("profile", {
           secondaryColor: data.value.profile.secondaryColor,
         };
 
-        console.log("color", this.pageStyle);
       } else if (error.value) {
         this.loading = false;
         console.log("error on fetchProfile", error.value?.message);
@@ -129,7 +128,7 @@ export const useProfileStore = defineStore("profile", {
       if (data.value) {
         this.links = data.value.links;
       } else if (error.value) {
-        console.log("error on errorLinks", error.value?.message);
+        console.log("error on dSeleteLinks", error.value?.message);
         this.error = error.value as ErrorResponse;
       }
     },

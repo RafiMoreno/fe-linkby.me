@@ -40,9 +40,8 @@ fetchLinks(username);
       <div class="h-[25px]" />
       <LinkBox
         v-for="link in links"
-        :key="link.id"
-        :url="link.url"
-        :image-url="link.iconUrl"
+        :key="link.ID"
+        :link="link"
         :primary-color="profile.primaryColor"
         :secondary-color="profile.secondaryColor"
       >

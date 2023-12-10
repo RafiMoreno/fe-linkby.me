@@ -18,6 +18,7 @@ const linkInput = ref<LinkSubmitPayload>({
   title: "",
   url: "",
   iconUrl: "",
+  iconColor: undefined,
 });
 
 const isFormValid = computed(
@@ -44,6 +45,11 @@ const handleSubmit = async () => {
   }
   emit("closeEditor");
 };
+
+const handleIconSelect = (icon: IconInput) => {
+  linkInput.value.iconColor = icon.color;
+  linkInput.value.iconUrl = icon.name;
+};
 </script>
 
 <template>
@@ -62,6 +68,7 @@ const handleSubmit = async () => {
 
     <TextInput v-model="linkInput.title" title="Title" />
     <TextInput v-model="linkInput.url" title="URL" />
+    <IconifySelect @on-icon-select="handleIconSelect" />
     <Button
       type="submit"
       class="rounded-2xl font-bold text-xl"
