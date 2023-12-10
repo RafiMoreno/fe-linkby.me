@@ -1,32 +1,32 @@
-<script setup>
+<script setup lang="ts">
 import { Icon } from "@iconify/vue";
 const props = defineProps({
   variant: {
     type: String,
-    validators: (value) => ["default", "edit", "view", "add"].includes(value),
+    validators: (value: string) =>
+      ["default", "edit", "view", "add"].includes(value),
     default: "default",
   },
-  url: {
-    type: String,
-    default: null,
-  },
-  imageUrl: {
-    type: String,
-    default: "",
+  link: {
+    type: Object as PropType<Link>,
+    default: () => ({}),
   },
   primaryColor: {
     type: String,
-    default: null,
+    default: "#A44646",
   },
   secondaryColor: {
     type: String,
-    default: null,
+    default: "#FFFFFF",
   },
 });
 
 const handleClick = () => {
   if (process.browser && props.variant === "default") {
-    window.open(props.url, "_blank").focus();
+    const w = window.open(props.link.url, "_blank");
+    if (w) {
+      w.focus();
+    }
   }
 };
 </script>
@@ -38,15 +38,15 @@ const handleClick = () => {
     v-bind="$attrs"
     @click="handleClick"
   >
-    <NuxtImg
-      v-if="variant != 'create' && imageUrl != ''"
+    <Icon
+      v-if="variant != 'create' && link.iconUrl != '' && link != undefined"
+      :icon="link.iconUrl!"
       class="object-contain w-[32px] h-[32px]"
-      :src="imageUrl"
     />
     <Icon
       v-else-if="variant == 'create'"
       icon="ic:outline-add"
-      :color="primaryColor"
+      :color="secondaryColor"
       width="32"
       class=""
     />

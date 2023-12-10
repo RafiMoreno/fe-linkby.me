@@ -2,6 +2,7 @@ interface LinkSubmitPayload {
   url: string;
   title: string;
   iconUrl?: string;
+  iconColor?: string;
 }
 
 interface LinkEditPayload {
@@ -9,6 +10,7 @@ interface LinkEditPayload {
   url: string;
   title: string;
   iconUrl?: string;
+  iconColor?: string;
 }
 
 interface Link {
@@ -17,8 +19,14 @@ interface Link {
   title: string;
   clickCount: string;
   iconUrl?: string;
+  iconColor?: string;
 }
 
 interface LinkResponse {
   links: Link[];
+}
+
+interface IconInput {
+  name: string;
+  color: string;
 }
