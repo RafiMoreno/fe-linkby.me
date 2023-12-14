@@ -103,6 +103,22 @@ export const useProfileStore = defineStore("profile", {
         this.error = error.value as ErrorResponse;
       }
     },
+    async editDisplayImage(payload: FormData, username: string) {
+      const { data, error } = await useFetch<ImageResponse>(
+        `http://localhost:8080/api/v1/profile/${username}/upload-image`,
+        {
+          method: "put",
+          body: payload,
+          credentials: "include",
+        },
+      );
+      if (data.value) {
+        this.profile.displayPicture = data.value.displayPicture;
+      }
+      if (error.value) {
+        this.error = error.value as ErrorResponse;
+      }
+    },
     async addLink(payload: LinkSubmitPayload, username: string) {
       const { data, error } = await useFetch<LinkResponse>(
         `http://localhost:8080/api/v1/profile/${username}/link`,
