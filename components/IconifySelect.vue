@@ -4,19 +4,24 @@ import { Icon } from "@iconify/vue";
 
 const isModalActive = ref(false);
 
-const isColorPickerActive = ref(false);
-
-const iconSearchInput = ref<IconInput>({ name: "", color: "#070707" });
-
 const icons = ref([]);
 
+const props = defineProps({
+  initialValue: {
+    type: Object as PropType<IconInput>,
+    default: () => ({ name: "", color: "#070707" }),
+  },
+});
+
+const iconSearchInput = ref<IconInput>(props.initialValue);
+
 const emit = defineEmits<{
-  onIconSelect: [icon: IconInput];
+  onIconSelect: [iconInput: IconInput];
 }>();
 
 async function searchIcons() {
   const apiUrl = `https://api.iconify.design/search?query=${encodeURIComponent(
-    iconSearchInput.value.name,
+    iconSearchInput.value.name ?? "",
   )}`;
   console.log(iconSearchInput);
 
@@ -33,13 +38,17 @@ function handleIconSelect(icon: string) {
   emit("onIconSelect", { name: icon, color: iconSearchInput.value.color });
   isModalActive.value = false;
 }
+
+searchIcons();
 </script>
 
 <template>
-  <Button type="button" @click="isModalActive = true">Find an icon!</Button>
+  <div v-bind="$attrs" @click="isModalActive = true">
+    <slot />
+  </div>
   <div
     v-if="isModalActive"
-    class="bg-[#000000] fixed h-[150vh] w-[150vw] opacity-60 z-25 ml-[-30vw] mt-[-200px]"
+    class="bg-[#000000] fixed h-[150vh] w-[150vw] opacity-60 z-25 ml-[-30vw] mt-[-30vh]"
   />
   <div
     v-if="isModalActive"
@@ -54,30 +63,26 @@ function handleIconSelect(icon: string) {
     />
     <p class="text-center font-bold text-xl">Click on an icon to select</p>
     <form
-      class="flex flex-row items-center gap-4"
+      class="flex flex-row items-center gap-2"
       @submit.prevent="searchIcons"
     >
       <div class="flex flex-row items-center p-4 align-middle gap-4 w-full">
-        <div
-          class="border border-[#B2B2B2] rounded w-[32px] h-[32px] cursor-pointer"
-          :style="{ 'background-color': iconSearchInput.color }"
-          @click.stop="isColorPickerActive = !isColorPickerActive"
-        >
-          <v-color-picker
-            v-if="isColorPickerActive"
-            v-model="iconSearchInput.color"
-            hide-inputs
-            :modes="['hexa']"
-            elevation="5"
-            class="z-50 select-none"
-          />
-        </div>
+        <input
+          v-model="iconSearchInput.color"
+          type="color"
+          class="w-12 h-12 flex-none"
+        />
         <TextInput v-model="iconSearchInput.name" placeholder="E.g. 'error'" />
         <div
           class="bg-dark-red link-box-icon-button w-12 aspect-square rounded-[50%] grid place-items-center link-circle-button"
         >
-          <button type="submit">
-            <Icon icon="ic:outline-search" color="white" width="28" class="" />
+          <button type="submit" class="flex-none w-12 h-12 grid content-center">
+            <Icon
+              icon="ic:outline-search"
+              color="white"
+              width="28"
+              class="justify-self-center"
+            />
           </button>
         </div>
       </div>
@@ -92,6 +97,7 @@ function handleIconSelect(icon: string) {
         @click="() => handleIconSelect(icon as string)"
       >
         <v-tooltip :text="icon">
+          <!-- eslint-disable-next-line vue/no-template-shadow -->
           <template #activator="{ props }">
             <Icon
               :icon="icon"
@@ -107,3 +113,16 @@ function handleIconSelect(icon: string) {
     </div>
   </div>
 </template>
+<style>
+input[type="color"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: solid 1px #b2b2b2;
+  border-radius: 16px;
+}
+</style>

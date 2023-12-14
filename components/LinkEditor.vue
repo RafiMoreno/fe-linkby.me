@@ -21,7 +21,7 @@ const snackbar = useSnackbar();
 
 const username: string = route.params.username.toString();
 
-const linkForm = ref<LinkEditPayload>({
+const linkInput = ref<LinkEditPayload>({
   ID: props.link.ID,
   title: props.link.title,
   url: props.link.url,
@@ -29,14 +29,17 @@ const linkForm = ref<LinkEditPayload>({
   iconColor: props.link.iconColor,
 });
 
+const isLoading = ref(false);
+
 const isFormValid = computed(
-  () => linkForm.value.title !== "" && linkForm.value.url !== "",
+  () => linkInput.value.title !== "" && linkInput.value.url !== "",
 );
 
 const handleSubmit = async () => {
-  console.log("link submit payload", linkForm.value);
+  console.log("link submit payload", linkInput.value);
   if (isFormValid) {
-    await editLink(linkForm.value, username);
+    isLoading.value = true;
+    await editLink(linkInput.value, username);
     if (error.value) {
       snackbar.add({
         type: "error",
@@ -69,8 +72,8 @@ const handleDelete = async () => {
 };
 
 const handleIconSelect = (icon: IconInput) => {
-  linkForm.value.iconColor = icon.color;
-  linkForm.value.iconUrl = icon.name;
+  linkInput.value.iconColor = icon.color;
+  linkInput.value.iconUrl = icon.name;
 };
 </script>
 
@@ -88,9 +91,29 @@ const handleIconSelect = (icon: IconInput) => {
     />
     <p class="text-center font-bold text-xl">Edit a Link</p>
 
-    <TextInput v-model="linkForm.title" title="Title" />
-    <TextInput v-model="linkForm.url" title="URL" />
-    <IconifySelect class="font-bold" @on-icon-select="handleIconSelect" />
+    <TextInput v-model="linkInput.title" title="Title" />
+    <TextInput v-model="linkInput.url" title="URL" />
+    <label> Icon </label>
+    <IconifySelect
+      class="flex flex-row align-center gap-4 border pl-2 rounded-xl border-[#dddddd]"
+      :initial-value="{ name: linkInput.iconUrl, color: linkInput.iconColor }"
+      @on-icon-select="handleIconSelect"
+    >
+      <Icon
+        v-if="linkInput.iconUrl"
+        :icon="linkInput.iconUrl"
+        :color="linkInput.iconColor ?? 'black'"
+        class="w-[32px] h-[32px]"
+      />
+      <p class="flex-auto truncate">{{ linkInput.iconUrl }}</p>
+      <Button
+        type="button"
+        variant="outline"
+        class="font-bold w-32 min-w-min px-4"
+      >
+        Change Icon
+      </Button>
+    </IconifySelect>
     <div type="button" class="flex flex-col-reverse sm:flex-row gap-2">
       <Button
         type="button"
@@ -102,8 +125,10 @@ const handleIconSelect = (icon: IconInput) => {
       <Button
         type="submit"
         class="rounded-2xl font-bold text-xl"
-        :disabled="!isFormValid"
-        >Save
+        :disabled="!isFormValid || isLoading"
+      >
+        <LoadingSpinner v-if="isLoading" size="20px" />
+        Save
       </Button>
     </div>
   </form>

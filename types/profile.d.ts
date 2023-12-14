@@ -11,11 +11,11 @@ interface Profile {
 }
 
 interface ProfileEditPayload {
-  displayName: string;
-  primaryColor: string;
-  secondaryColor: string;
-  description: string;
-  displayPicture: string;
+  displayName?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  description?: string;
+  displayPicture?: string;
 }
 
 interface ProfileResponse {
@@ -32,7 +32,6 @@ interface ProfileTheme {
 }
 
 interface ProfileState {
-  loading: bool,
   profile: Profile | null,
   error: ErrorResponse | null,
   links:  Link[],

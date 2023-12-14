@@ -22,13 +22,16 @@ const isColorSecondaryPickerActive = useState<Boolean>(
   () => false,
 );
 
+const isLoading = ref(false);
+
 const themeInput = ref<ProfileEditPayload>({
   primaryColor: props.primaryColor,
   secondaryColor: props.secondaryColor,
 });
 
 const handleSubmit = async () => {
-  await editProfile(themeInput.value, props.username);
+  isLoading.value = true;
+  await editProfile(themeInput.value, props.username.toString());
   if (error.value) {
     snackbar.add({
       type: "error",
@@ -111,8 +114,13 @@ const handleSubmit = async () => {
         />
       </div>
     </div>
-    <Button class="rounded-2xl font-bold text-xl" @click="handleSubmit"
-      >Save Changes</Button
+    <Button
+      class="rounded-2xl font-bold text-xl"
+      :disabled="isLoading"
+      @click="handleSubmit"
     >
+      <LoadingSpinner v-if="isLoading" size="20px" />
+      Save Changes
+    </Button>
   </div>
 </template>

@@ -21,13 +21,15 @@ const linkInput = ref<LinkSubmitPayload>({
   iconColor: undefined,
 });
 
+const isLoading = ref(false);
+
 const isFormValid = computed(
   () => linkInput.value.title !== "" && linkInput.value.url !== "",
 );
 
 const handleSubmit = async () => {
   if (isFormValid) {
-    console.log("submit", linkInput.value);
+    isLoading.value = true;
     await addLink(linkInput.value, username);
     if (error.value) {
       snackbar.add({
@@ -68,12 +70,33 @@ const handleIconSelect = (icon: IconInput) => {
 
     <TextInput v-model="linkInput.title" title="Title" />
     <TextInput v-model="linkInput.url" title="URL" />
-    <IconifySelect @on-icon-select="handleIconSelect" />
+    <label> Icon </label>
+    <IconifySelect
+      class="flex flex-row align-center gap-4 border pl-2 rounded-xl border-[#dddddd]"
+      @on-icon-select="handleIconSelect"
+    >
+      <Icon
+        v-if="linkInput.iconUrl"
+        :icon="linkInput.iconUrl"
+        :color="linkInput.iconColor ?? 'black'"
+        class="w-[32px] h-[32px]"
+      />
+      <p class="flex-auto truncate">{{ linkInput.iconUrl }}</p>
+      <Button
+        type="button"
+        variant="outline"
+        class="font-bold w-36 min-w-min px-4"
+      >
+        Pick an Icon
+      </Button>
+    </IconifySelect>
     <Button
       type="submit"
       class="rounded-2xl font-bold text-xl"
-      :disabled="!isFormValid"
-      >Add</Button
+      :disabled="!isFormValid || isLoading"
     >
+      <LoadingSpinner v-if="isLoading" size="20px" />
+      Add
+    </Button>
   </form>
 </template>

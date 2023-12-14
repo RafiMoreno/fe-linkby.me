@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
-defineProps({
+const props = defineProps({
   disabled: Boolean,
   variant: {
     type: String,
@@ -8,14 +8,29 @@ defineProps({
     default: "fill",
   },
 });
+
+const buttonStyle = computed(() =>
+  props.disabled
+    ? {}
+    : props.variant === "outline"
+      ? {
+          backgroundColor: "#ffffff",
+          color: "#a44646",
+          border: "1px solid #dddddd",
+        }
+      : {
+          backgroundColor: "#a44646",
+          color: "#ffffff",
+          border: "none",
+        },
+);
 </script>
 
 <template>
   <button
     v-bind="$attrs"
     :disabled="disabled"
-    :class="variant"
-    class="w-full rounded-xl h-12 font-bold"
+    class="w-full rounded-xl h-12 font-bold flex flex-row items-center justify-center gap-2"
     @click="onClick"
   >
     <slot />
@@ -23,22 +38,16 @@ defineProps({
 </template>
 
 <style scoped>
-.fill {
-  background-color: #a44646;
-  color: #ffffff;
+button {
+  background-color: v-bind("buttonStyle.backgroundColor");
+  color: v-bind("buttonStyle.color");
+  border: v-bind("buttonStyle.border");
 }
-
-.outline {
-  background-color: #ffffff;
-  color: #a44646;
-  border: 1px solid #dddddd;
-}
-
 button:disabled {
   background-color: #dddddd;
   color: black;
+  cursor: default;
 }
-
 button:hover:enabled {
   filter: brightness(95%);
 }
