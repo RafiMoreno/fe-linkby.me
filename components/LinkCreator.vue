@@ -95,7 +95,7 @@ const handleIconSelect = (icon: IconInput) => {
       class="rounded-2xl font-bold text-xl"
       :disabled="!isFormValid || isLoading"
     >
-      <LoadingSpinner v-if="isLoading" size="20px" color="#000000" />
+      <LoadingSpinner v-if="isLoading" size="20px" />
       Add
     </Button>
   </form>

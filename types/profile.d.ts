@@ -11,11 +11,11 @@ interface Profile {
 }
 
 interface ProfileEditPayload {
-  displayName: string;
-  primaryColor: string;
-  secondaryColor: string;
-  description: string;
-  displayPicture: string;
+  displayName?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  description?: string;
+  displayPicture?: string;
 }
 
 interface ProfileResponse {

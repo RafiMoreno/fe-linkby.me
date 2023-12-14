@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps({
   size: { type: String, default: "16" },
-  color: { type: String, default: "white" },
+  color: { type: String, default: "black" },
   thickness: { type: String, default: "2px" },
 });
 </script>

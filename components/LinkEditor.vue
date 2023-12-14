@@ -29,6 +29,8 @@ const linkInput = ref<LinkEditPayload>({
   iconColor: props.link.iconColor,
 });
 
+const isLoading = ref(false);
+
 const isFormValid = computed(
   () => linkInput.value.title !== "" && linkInput.value.url !== "",
 );
@@ -36,6 +38,7 @@ const isFormValid = computed(
 const handleSubmit = async () => {
   console.log("link submit payload", linkInput.value);
   if (isFormValid) {
+    isLoading.value = true;
     await editLink(linkInput.value, username);
     if (error.value) {
       snackbar.add({
@@ -122,8 +125,10 @@ const handleIconSelect = (icon: IconInput) => {
       <Button
         type="submit"
         class="rounded-2xl font-bold text-xl"
-        :disabled="!isFormValid"
-        >Save
+        :disabled="!isFormValid || isLoading"
+      >
+        <LoadingSpinner v-if="isLoading" size="20px" />
+        Save
       </Button>
     </div>
   </form>
