@@ -28,7 +28,6 @@ interface ProfileTheme {
 }
 
 interface ProfileState {
-  loading: bool,
   profile: Profile | null,
   error: ErrorResponse | null,
   links:  Link[],
