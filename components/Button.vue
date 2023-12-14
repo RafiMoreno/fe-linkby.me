@@ -9,22 +9,19 @@ const props = defineProps({
   },
 });
 
-const style = computed(() =>
+const buttonStyle = computed(() =>
   props.disabled
-    ? {
-        "background-color": "#dddddd",
-        color: "black",
-        cursor: "default",
-      }
+    ? {}
     : props.variant === "outline"
       ? {
-          "background-color": "#ffffff",
+          backgroundColor: "#ffffff",
           color: "#a44646",
           border: "1px solid #dddddd",
         }
       : {
-          "background-color": "#a44646",
+          backgroundColor: "#a44646",
           color: "#ffffff",
+          border: "none",
         },
 );
 </script>
@@ -33,8 +30,7 @@ const style = computed(() =>
   <button
     v-bind="$attrs"
     :disabled="disabled"
-    :style="style"
-    class="w-full rounded-xl h-12 font-bold"
+    class="w-full rounded-xl h-12 font-bold flex flex-row items-center justify-center gap-2"
     @click="onClick"
   >
     <slot />
@@ -42,6 +38,16 @@ const style = computed(() =>
 </template>
 
 <style scoped>
+button {
+  background-color: v-bind("buttonStyle.backgroundColor");
+  color: v-bind("buttonStyle.color");
+  border: v-bind("buttonStyle.border");
+}
+button:disabled {
+  background-color: #dddddd;
+  color: black;
+  cursor: default;
+}
 button:hover:enabled {
   filter: brightness(95%);
 }

@@ -21,12 +21,15 @@ const linkInput = ref<LinkSubmitPayload>({
   iconColor: undefined,
 });
 
+const isLoading = ref(false);
+
 const isFormValid = computed(
   () => linkInput.value.title !== "" && linkInput.value.url !== "",
 );
 
 const handleSubmit = async () => {
   if (isFormValid) {
+    isLoading.value = true;
     await addLink(linkInput.value, username);
     if (error.value) {
       snackbar.add({
@@ -90,8 +93,10 @@ const handleIconSelect = (icon: IconInput) => {
     <Button
       type="submit"
       class="rounded-2xl font-bold text-xl"
-      :disabled="!isFormValid"
-      >Add</Button
+      :disabled="!isFormValid || isLoading"
     >
+      <LoadingSpinner v-if="isLoading" size="20px" color="#000000" />
+      Add
+    </Button>
   </form>
 </template>
