@@ -20,7 +20,7 @@ const isEditLinkActive = useState<Boolean>("isEditLinkActive", () => false);
 
 const linkEditData = ref<Link>();
 
-const { loading, profile, links, error, pageStyle } =
+const { isLoading, profile, links, error, pageStyle } =
   storeToRefs(useProfileStore());
 
 const { fetchProfile, fetchLinks } = useProfileStore();
@@ -42,10 +42,12 @@ definePageMeta({
 
 <template>
   <div
-    v-if="!loading"
-    :style="pageStyle"
-    class="relative h-full overflow-hidden"
+    v-if="isLoading"
+    class="h-screen w-screen bg-dark-red grid justify-center items-center"
   >
+    <LoadingSpinner size="200px" color="white" thickness="12px" />
+  </div>
+  <div v-else :style="pageStyle" class="relative h-full overflow-hidden">
     <div
       v-if="isOverlayActive"
       class="fixed flex bg-[#000000] h-screen w-full opacity-60 justify-center z-20"
@@ -64,7 +66,7 @@ definePageMeta({
       v-if="isProfileEditorActive"
       :username="username"
       :display-name="profile ? profile.displayName : ''"
-      :description="profile ? profile.description: ''"
+      :description="profile ? profile.description : ''"
       @close-editor="
         isProfileEditorActive = !isProfileEditorActive;
         isOverlayActive = !isOverlayActive;

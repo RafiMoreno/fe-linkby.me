@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 
 export const useProfileStore = defineStore("profile", {
   state: (): ProfileState => ({
-    loading: false,
     profile: null as Profile | null,
     error: null as ErrorResponse | null,
     links: [] as Link[],
@@ -21,10 +20,12 @@ export const useProfileStore = defineStore("profile", {
       secondaryColor: "#EEEEEE",
     } as ProfileTheme,
   }),
+  getters: {
+    isLoading: (state) => state.profile == null,
+  },
   actions: {
     async fetchProfile(username: string) {
       // useFetch from nuxt 3
-      this.loading = true;
       const { data, error } = await useFetch<ProfileResponse>(
         `http://127.0.0.1:8080/api/v1/profile/${username}`,
         {
@@ -32,7 +33,6 @@ export const useProfileStore = defineStore("profile", {
         },
       );
       if (data.value) {
-        this.loading = false;
         this.profile = data.value.profile;
         this.linkBoxStyle = {
           color: data.value.profile.primaryColor,
@@ -51,14 +51,12 @@ export const useProfileStore = defineStore("profile", {
           secondaryColor: data.value.profile.secondaryColor,
         };
       } else if (error.value) {
-        this.loading = false;
         console.log("error on fetchProfile", error.value?.message);
         this.error = error.value as ErrorResponse;
       }
     },
     async fetchLinks(username: string) {
       // useFetch from nuxt 3
-      this.loading = true;
       const { data, error } = await useFetch<LinkResponse>(
         `http://127.0.0.1:8080/api/v1/profile/${username}/link`,
         {
@@ -66,10 +64,8 @@ export const useProfileStore = defineStore("profile", {
         },
       );
       if (data.value) {
-        this.loading = false;
         this.links = data.value.links;
       } else if (error.value) {
-        this.loading = false;
         console.log("error on fetchLinks", error.value?.message);
         this.error = error.value as ErrorResponse;
       }

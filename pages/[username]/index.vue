@@ -5,7 +5,7 @@ const route = useRoute();
 const username: string = route.params.username.toString();
 const isMyProfile = isProfileOwner(username).value;
 
-const { loading, profile, links, error, pageStyle } =
+const { isLoading, profile, links, error, pageStyle } =
   storeToRefs(useProfileStore());
 const { fetchProfile, fetchLinks } = useProfileStore();
 fetchProfile(username);
@@ -13,7 +13,13 @@ fetchLinks(username);
 </script>
 
 <template>
-  <div v-if="!loading" :style="pageStyle" class="h-full overflow-hidden">
+  <div
+    v-if="isLoading"
+    class="h-screen w-screen bg-dark-red grid justify-center items-center"
+  >
+    <LoadingSpinner size="200px" color="white" thickness="12px" />
+  </div>
+  <div v-else :style="pageStyle" class="h-full overflow-hidden">
     <div class="flex p-2 justify-end">
       <Icon
         v-if="isMyProfile"
