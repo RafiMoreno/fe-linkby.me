@@ -12,6 +12,8 @@ const props = defineProps<{
   username: string;
 }>();
 
+const isLoading = ref(false);
+
 const imgUrl = ref(props.currentDisplayPicture)
 const fd = new FormData(); 
 
@@ -35,6 +37,7 @@ const onFileChange = (e : any) => {
 
 const handleSubmit = async () => {
     if(imgUrl.value != props.currentDisplayPicture){
+        isLoading.value = true;
         await editDisplayImage(fd, props.username);
         if (error.value) {
             snackbar.add({
@@ -89,7 +92,10 @@ const handleSubmit = async () => {
             font-bold text-lg text-center justify-center align-center hover:brightness-95 hover:cursor-pointer">
                 Choose File
             </label>
-            <Button class="rounded-2xl font-bold text-lg" @click="handleSubmit"> Submit </Button>
+            <Button class="rounded-2xl font-bold text-lg" @click="handleSubmit" :disabled="isLoading"> 
+                <LoadingSpinner v-if="isLoading" size="20px" />
+                Submit 
+            </Button>
         </div>
   </div>
 </template>
