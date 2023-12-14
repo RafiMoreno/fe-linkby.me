@@ -9,8 +9,12 @@ const props = defineProps({
   },
 });
 
-const style =
-  props.variant === "outline"
+const style = props.disabled
+  ? {
+      "background-color": "#dddddd",
+      color: "black",
+    }
+  : props.variant === "outline"
     ? {
         "background-color": "#ffffff",
         color: "#a44646",
@@ -35,11 +39,6 @@ const style =
 </template>
 
 <style scoped>
-button:disabled {
-  background-color: #dddddd;
-  color: black;
-}
-
 button:hover:enabled {
   filter: brightness(95%);
 }
