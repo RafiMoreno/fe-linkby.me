@@ -9,21 +9,24 @@ const props = defineProps({
   },
 });
 
-const style = props.disabled
-  ? {
-      "background-color": "#dddddd",
-      color: "black",
-    }
-  : props.variant === "outline"
+const style = computed(() =>
+  props.disabled
     ? {
-        "background-color": "#ffffff",
-        color: "#a44646",
-        border: "1px solid #dddddd",
+        "background-color": "#dddddd",
+        color: "black",
+        cursor: "default",
       }
-    : {
-        "background-color": "#a44646",
-        color: "#ffffff",
-      };
+    : props.variant === "outline"
+      ? {
+          "background-color": "#ffffff",
+          color: "#a44646",
+          border: "1px solid #dddddd",
+        }
+      : {
+          "background-color": "#a44646",
+          color: "#ffffff",
+        },
+);
 </script>
 
 <template>
