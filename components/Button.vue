@@ -7,6 +7,10 @@ defineProps({
     validators: (value) => ["fill", "outline"].includes(value),
     default: "fill",
   },
+  type: {
+    type: String,
+    default: "button",
+  },
 });
 </script>
 
@@ -15,6 +19,7 @@ defineProps({
     v-bind="$attrs"
     :disabled="disabled"
     :class="variant"
+    :type="type"
     class="w-full rounded-xl h-12 font-bold"
     @click="onClick"
   >
