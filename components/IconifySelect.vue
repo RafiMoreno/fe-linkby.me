@@ -4,17 +4,24 @@ import { Icon } from "@iconify/vue";
 
 const isModalActive = ref(false);
 
-const iconSearchInput = ref<IconInput>({ name: "", color: "#070707" });
-
 const icons = ref([]);
 
+const props = defineProps({
+  initialValue: {
+    type: Object as PropType<IconInput>,
+    default: () => ({ name: "", color: "#070707" }),
+  },
+});
+
+const iconSearchInput = ref<IconInput>(props.initialValue);
+
 const emit = defineEmits<{
-  onIconSelect: [icon: IconInput];
+  onIconSelect: [iconInput: IconInput];
 }>();
 
 async function searchIcons() {
   const apiUrl = `https://api.iconify.design/search?query=${encodeURIComponent(
-    iconSearchInput.value.name,
+    iconSearchInput.value.name ?? "",
   )}`;
   console.log(iconSearchInput);
 
@@ -31,13 +38,17 @@ function handleIconSelect(icon: string) {
   emit("onIconSelect", { name: icon, color: iconSearchInput.value.color });
   isModalActive.value = false;
 }
+
+searchIcons();
 </script>
 
 <template>
-  <Button type="button" @click="isModalActive = true">Find an icon!</Button>
+  <div v-bind="$attrs" @click="isModalActive = true">
+    <slot />
+  </div>
   <div
     v-if="isModalActive"
-    class="bg-[#000000] fixed h-[150vh] w-[150vw] opacity-60 z-25 ml-[-30vw] mt-[-200px]"
+    class="bg-[#000000] fixed h-[150vh] w-[150vw] opacity-60 z-25 ml-[-30vw] mt-[-30vh]"
   />
   <div
     v-if="isModalActive"
@@ -86,6 +97,7 @@ function handleIconSelect(icon: string) {
         @click="() => handleIconSelect(icon as string)"
       >
         <v-tooltip :text="icon">
+          <!-- eslint-disable-next-line vue/no-template-shadow -->
           <template #activator="{ props }">
             <Icon
               :icon="icon"

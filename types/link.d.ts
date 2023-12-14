@@ -27,6 +27,6 @@ interface LinkResponse {
 }
 
 interface IconInput {
-  name: string;
-  color: string;
+  name?: string;
+  color?: string;
 }
