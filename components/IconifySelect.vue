@@ -4,8 +4,6 @@ import { Icon } from "@iconify/vue";
 
 const isModalActive = ref(false);
 
-const isColorPickerActive = ref(false);
-
 const iconSearchInput = ref<IconInput>({ name: "", color: "#070707" });
 
 const icons = ref([]);
@@ -54,30 +52,26 @@ function handleIconSelect(icon: string) {
     />
     <p class="text-center font-bold text-xl">Click on an icon to select</p>
     <form
-      class="flex flex-row items-center gap-4"
+      class="flex flex-row items-center gap-2"
       @submit.prevent="searchIcons"
     >
       <div class="flex flex-row items-center p-4 align-middle gap-4 w-full">
-        <div
-          class="border border-[#B2B2B2] rounded w-[32px] h-[32px] cursor-pointer"
-          :style="{ 'background-color': iconSearchInput.color }"
-          @click.stop="isColorPickerActive = !isColorPickerActive"
-        >
-          <v-color-picker
-            v-if="isColorPickerActive"
-            v-model="iconSearchInput.color"
-            hide-inputs
-            :modes="['hexa']"
-            elevation="5"
-            class="z-50 select-none"
-          />
-        </div>
+        <input
+          v-model="iconSearchInput.color"
+          type="color"
+          class="w-12 h-12 flex-none"
+        />
         <TextInput v-model="iconSearchInput.name" placeholder="E.g. 'error'" />
         <div
           class="bg-dark-red link-box-icon-button w-12 aspect-square rounded-[50%] grid place-items-center link-circle-button"
         >
-          <button type="submit">
-            <Icon icon="ic:outline-search" color="white" width="28" class="" />
+          <button type="submit" class="flex-none w-12 h-12 grid content-center">
+            <Icon
+              icon="ic:outline-search"
+              color="white"
+              width="28"
+              class="justify-self-center"
+            />
           </button>
         </div>
       </div>
@@ -107,3 +101,16 @@ function handleIconSelect(icon: string) {
     </div>
   </div>
 </template>
+<style>
+input[type="color"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: solid 1px #b2b2b2;
+  border-radius: 16px;
+}
+</style>
