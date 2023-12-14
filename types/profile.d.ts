@@ -22,6 +22,10 @@ interface ProfileResponse {
   profile: Profile;
 }
 
+interface ImageResponse {
+  displayPicture: string;
+}
+
 interface ProfileTheme {
   primaryColor: string,
   secondaryColor: string,

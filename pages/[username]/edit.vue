@@ -4,20 +4,12 @@ import { useProfileStore } from "~/store/profile";
 
 const route = useRoute();
 const username: string = route.params.username.toString();
-const isColorEditorActive = useState<Boolean>(
-  "isColorEditorActive",
-  () => false,
-);
-const isProfileEditorActive = useState<Boolean>(
-  "isProfileEditorActive",
-  () => false,
-);
+const isColorEditorActive = useState<Boolean>("isColorEditorActive",() => false);
+const isProfileEditorActive = useState<Boolean>("isProfileEditorActive", () => false);
+const isImageEditorActive = useState<Boolean>("isImageEditorActive ", () => false);
 const isOverlayActive = useState<Boolean>("isOverlayActive", () => false);
-
 const isAddLinkActive = useState<Boolean>("isAddLinkActive", () => false);
-
 const isEditLinkActive = useState<Boolean>("isEditLinkActive", () => false);
-
 const linkEditData = ref<Link>();
 
 const { loading, profile, links, error, pageStyle } =
@@ -70,6 +62,14 @@ definePageMeta({
         isOverlayActive = !isOverlayActive;
       "
     />
+    <ImageEditor
+    v-if="isImageEditorActive"
+    @close-editor="
+      isImageEditorActive = !isImageEditorActive;
+      isOverlayActive = !isOverlayActive;"
+    :username="username"
+    :current-display-picture="profile ? profile.displayPicture : ''"
+    />
     <LinkCreator
       v-if="isAddLinkActive"
       @close-editor="
@@ -117,6 +117,9 @@ definePageMeta({
             icon="mdi:pencil"
             width="32"
             class="absolute right-[10px] top-[6px] rounded-2xl border-[2px] bg-origin-padding p-1 z-10 transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110 duration-75"
+            @click="
+              isImageEditorActive = !isImageEditorActive;
+              isOverlayActive = !isOverlayActive;"
           />
           <NuxtImg
             v-if="
