@@ -4,16 +4,24 @@ import { useProfileStore } from "~/store/profile";
 
 const route = useRoute();
 const username: string = route.params.username.toString();
-const isColorEditorActive = useState<Boolean>("isColorEditorActive",() => false);
-const isProfileEditorActive = useState<Boolean>("isProfileEditorActive", () => false);
-const isImageEditorActive = useState<Boolean>("isImageEditorActive ", () => false);
+const isColorEditorActive = useState<Boolean>(
+  "isColorEditorActive",
+  () => false,
+);
+const isProfileEditorActive = useState<Boolean>(
+  "isProfileEditorActive",
+  () => false,
+);
+const isImageEditorActive = useState<Boolean>(
+  "isImageEditorActive ",
+  () => false,
+);
 const isOverlayActive = useState<Boolean>("isOverlayActive", () => false);
 const isAddLinkActive = useState<Boolean>("isAddLinkActive", () => false);
 const isEditLinkActive = useState<Boolean>("isEditLinkActive", () => false);
 const linkEditData = ref<Link>();
 
-const { isLoading, profile, links, error, pageStyle } =
-  storeToRefs(useProfileStore());
+const { isLoading, profile, links, pageStyle } = storeToRefs(useProfileStore());
 
 const { fetchProfile, fetchLinks } = useProfileStore();
 
@@ -65,12 +73,13 @@ definePageMeta({
       "
     />
     <ImageEditor
-    v-if="isImageEditorActive"
-    @close-editor="
-      isImageEditorActive = !isImageEditorActive;
-      isOverlayActive = !isOverlayActive;"
-    :username="username"
-    :current-display-picture="profile ? profile.displayPicture : ''"
+      v-if="isImageEditorActive"
+      :username="username"
+      :current-display-picture="profile ? profile.displayPicture : ''"
+      @close-editor="
+        isImageEditorActive = !isImageEditorActive;
+        isOverlayActive = !isOverlayActive;
+      "
     />
     <LinkCreator
       v-if="isAddLinkActive"
@@ -121,7 +130,8 @@ definePageMeta({
             class="absolute right-[10px] top-[6px] rounded-2xl border-[2px] bg-origin-padding p-1 z-10 transition ease-in-out delay-75 hover:-translate-y-1 hover:scale-110 duration-75"
             @click="
               isImageEditorActive = !isImageEditorActive;
-              isOverlayActive = !isOverlayActive;"
+              isOverlayActive = !isOverlayActive;
+            "
           />
           <NuxtImg
             v-if="
@@ -173,13 +183,6 @@ definePageMeta({
       >
         Add New Link
       </LinkBox>
-    </div>
-    <div v-if="error">
-      <ul>
-        <li>
-          {{ error }}
-        </li>
-      </ul>
     </div>
   </div>
 </template>

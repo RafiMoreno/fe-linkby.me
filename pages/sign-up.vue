@@ -20,8 +20,9 @@ const signUp = async () => {
   if (user.password === user.confirm) {
     console.log("calling api");
     const { data, pending, error } = await useFetch<SignUpResponse>(
-      "http://localhost:8080/api/v1/sign-up",
+      "/api/v1/sign-up",
       {
+        baseURL: useRuntimeConfig().public.APIBaseUrl,
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: user,
