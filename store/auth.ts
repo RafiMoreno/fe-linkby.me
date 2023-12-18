@@ -12,8 +12,9 @@ export const useAuthStore = defineStore("auth", {
       // useFetch from nuxt 3
       // console.log(payload)
       const { data, pending, error } = await useFetch<LogInResponse>(
-        "http://localhost:8080/api/v1/login",
+        "/api/v1/login",
         {
+          baseURL: useRuntimeConfig().public.APIBaseUrl,
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: payload,
@@ -46,8 +47,9 @@ export const useAuthStore = defineStore("auth", {
     async validateToken() {
       const token = useCookie("token");
       const { data, pending, error } = await useFetch<ValidateResponse>(
-        "http://localhost:8080/api/v1/validate",
+        "/api/v1/validate",
         {
+          baseURL: useRuntimeConfig().public.APIBaseUrl,
           method: "get",
           headers: {
             "Content-Type": "application/json",

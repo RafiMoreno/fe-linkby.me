@@ -106,13 +106,15 @@ const handleIconSelect = (icon: IconInput) => {
         class="w-[32px] h-[32px]"
       />
       <p class="flex-auto truncate">{{ linkInput.iconUrl }}</p>
-      <Button
-        type="button"
-        variant="outline"
-        class="font-bold w-32 min-w-min px-4"
-      >
-        Change Icon
-      </Button>
+      <div class="w-32">
+        <Button
+          type="button"
+          variant="outline"
+          class="font-bold min-w-min px-4"
+        >
+          Change Icon
+        </Button>
+      </div>
     </IconifySelect>
     <div type="button" class="flex flex-col-reverse sm:flex-row gap-2">
       <Button

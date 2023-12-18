@@ -82,13 +82,11 @@ const handleIconSelect = (icon: IconInput) => {
         class="w-[32px] h-[32px]"
       />
       <p class="flex-auto truncate">{{ linkInput.iconUrl }}</p>
-      <Button
-        type="button"
-        variant="outline"
-        class="font-bold w-36 min-w-min px-4"
-      >
-        Pick an Icon
-      </Button>
+      <div class="w-36">
+        <Button type="button" variant="outline" class="font-bold px-4">
+          Pick an Icon
+        </Button>
+      </div>
     </IconifySelect>
     <Button
       type="submit"

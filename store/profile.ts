@@ -27,9 +27,10 @@ export const useProfileStore = defineStore("profile", {
     async fetchProfile(username: string) {
       // useFetch from nuxt 3
       const { data, error } = await useFetch<ProfileResponse>(
-        `http://127.0.0.1:8080/api/v1/profile/${username}`,
+        `/api/v1/profile/${username}`,
         {
           method: "get",
+          baseURL: useRuntimeConfig().public.APIBaseUrl,
         },
       );
       if (data.value) {
@@ -58,9 +59,10 @@ export const useProfileStore = defineStore("profile", {
     async fetchLinks(username: string) {
       // useFetch from nuxt 3
       const { data, error } = await useFetch<LinkResponse>(
-        `http://127.0.0.1:8080/api/v1/profile/${username}/link`,
+        `/api/v1/profile/${username}/link`,
         {
           method: "get",
+          baseURL: useRuntimeConfig().public.APIBaseUrl,
         },
       );
       if (data.value) {
@@ -72,8 +74,9 @@ export const useProfileStore = defineStore("profile", {
     },
     async editProfile(payload: ProfileEditPayload, username: string) {
       const { data, error } = await useFetch<ProfileResponse>(
-        `http://localhost:8080/api/v1/profile/${username}`,
+        `/api/v1/profile/${username}`,
         {
+          baseURL: useRuntimeConfig().public.APIBaseUrl,
           method: "put",
           headers: {
             "Content-Type": "application/json",
@@ -105,14 +108,15 @@ export const useProfileStore = defineStore("profile", {
     },
     async editDisplayImage(payload: FormData, username: string) {
       const { data, error } = await useFetch<ImageResponse>(
-        `http://localhost:8080/api/v1/profile/${username}/upload-image`,
+        `/api/v1/profile/${username}/upload-image`,
         {
           method: "put",
+          baseURL: useRuntimeConfig().public.APIBaseUrl,
           body: payload,
           credentials: "include",
         },
       );
-      if (data.value) {
+      if (data.value && this.profile != null) {
         this.profile.displayPicture = data.value.displayPicture;
       }
       if (error.value) {
@@ -121,8 +125,9 @@ export const useProfileStore = defineStore("profile", {
     },
     async addLink(payload: LinkSubmitPayload, username: string) {
       const { data, error } = await useFetch<LinkResponse>(
-        `http://localhost:8080/api/v1/profile/${username}/link`,
+        `/api/v1/profile/${username}/link`,
         {
+          baseURL: useRuntimeConfig().public.APIBaseUrl,
           method: "post",
           headers: {
             "Content-Type": "application/json",
@@ -140,12 +145,15 @@ export const useProfileStore = defineStore("profile", {
       }
     },
     async editLink(payload: LinkEditPayload, username: string) {
+      const headers = useRequestHeaders(["cookie"]);
       const { data, error } = await useFetch<LinkResponse>(
-        `http://localhost:8080/api/v1/profile/${username}/link/${payload.ID}`,
+        `/api/v1/profile/${username}/link/${payload.ID}`,
         {
           method: "put",
+          baseURL: useRuntimeConfig().public.APIBaseUrl,
           headers: {
             "Content-Type": "application/json",
+            ...headers,
           },
           body: payload,
           pick: ["links"] as never[],
@@ -160,9 +168,12 @@ export const useProfileStore = defineStore("profile", {
       }
     },
     async deleteLink(linkID: string, username: string) {
+      const headers = useRequestHeaders(["cookie"]);
       const { data, error } = await useFetch<LinkResponse>(
-        `http://localhost:8080/api/v1/profile/${username}/link/${linkID}`,
+        `/api/v1/profile/${username}/link/${linkID}`,
         {
+          baseURL: useRuntimeConfig().public.APIBaseUrl,
+          headers,
           method: "delete",
           pick: ["links"] as never[],
           credentials: "include",
