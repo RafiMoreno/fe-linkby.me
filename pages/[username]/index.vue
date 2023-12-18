@@ -4,6 +4,7 @@ import { useProfileStore } from "~/store/profile";
 const route = useRoute();
 const username: string = route.params.username.toString();
 const isMyProfile = isProfileOwner(username).value;
+const isBottomPopUpActive = useCookie("token") == null ? ref(true) : ref(false);
 
 const { isLoading, profile, links, error, pageStyle } =
   storeToRefs(useProfileStore());
@@ -32,7 +33,7 @@ fetchLinks(username);
     </div>
     <div
       v-if="profile != null"
-      class="flex flex-col pt-12 pb-6 px-[12px] max-w-[700px] items-center mx-auto select-none"
+      class="flex flex-col pt-12 pb-3 px-[12px] max-w-[700px] items-center mx-auto select-none"
     >
       <NuxtImg
         v-if="
@@ -55,6 +56,13 @@ fetchLinks(username);
           {{ link.title }}
         </LinkBox>
       </div>
+      <VisitorPopUp 
+      class="mt-4"
+      v-if="!isBottomPopUpActive"
+      :primary-color="profile.secondaryColor"
+      :secondary-color="profile.primaryColor"
+      @closePopUp="isBottomPopUpActive = !isBottomPopUpActive"
+      />
     </div>
     <div v-if="error">
       <ul>
