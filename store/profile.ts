@@ -145,6 +145,7 @@ export const useProfileStore = defineStore("profile", {
       }
     },
     async editLink(payload: LinkEditPayload, username: string) {
+      const headers = useRequestHeaders(["cookie"]);
       const { data, error } = await useFetch<LinkResponse>(
         `/api/v1/profile/${username}/link/${payload.ID}`,
         {
@@ -152,6 +153,7 @@ export const useProfileStore = defineStore("profile", {
           baseURL: useRuntimeConfig().public.APIBaseUrl,
           headers: {
             "Content-Type": "application/json",
+            ...headers,
           },
           body: payload,
           pick: ["links"] as never[],
@@ -166,10 +168,12 @@ export const useProfileStore = defineStore("profile", {
       }
     },
     async deleteLink(linkID: string, username: string) {
+      const headers = useRequestHeaders(["cookie"]);
       const { data, error } = await useFetch<LinkResponse>(
         `/api/v1/profile/${username}/link/${linkID}`,
         {
           baseURL: useRuntimeConfig().public.APIBaseUrl,
+          headers,
           method: "delete",
           pick: ["links"] as never[],
           credentials: "include",
