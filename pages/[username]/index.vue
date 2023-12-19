@@ -1,16 +1,28 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import { useProfileStore } from "~/store/profile";
+
+const snackbar = useSnackbar();
 const route = useRoute();
 const username: string = route.params.username.toString();
 const isMyProfile = isProfileOwner(username).value;
-const isBottomPopUpActive = useCookie("token") == null ? ref(true) : ref(false);
+const isBottomPopUpActive = useCookie("token").value == undefined ? ref(true) : ref(false);
+
 
 const { isLoading, profile, links, error, pageStyle } =
   storeToRefs(useProfileStore());
 const { fetchProfile, fetchLinks } = useProfileStore();
 fetchProfile(username);
 fetchLinks(username);
+
+const copyUrl = () => {
+  navigator.clipboard.writeText(window.location.href);
+  snackbar.add({
+    type: "success",
+    text: "Successfully copied link",
+    background: profile.value?.secondaryColor
+  });
+}
 </script>
 
 <template>
@@ -23,6 +35,13 @@ fetchLinks(username);
   <div v-else :style="pageStyle" class="h-full overflow-hidden">
     <div class="flex p-2 justify-end">
       <Icon
+        icon="solar:link-broken"
+        color="pageStyle"
+        width="28"
+        class="mr-auto"
+        @click="copyUrl"
+      />
+      <Icon
         v-if="isMyProfile"
         icon="mdi:pencil-circle"
         color="pageStyle"
@@ -30,6 +49,7 @@ fetchLinks(username);
         class=""
         @click="navigateTo(`${username}/edit`)"
       />
+      
     </div>
     <div
       v-if="profile != null"
@@ -43,7 +63,7 @@ fetchLinks(username);
         :src="profile.displayPicture"
       />
       <b class="text-2xl select-text">{{ profile.displayName }}</b>
-      <p class="select-text">{{ profile.description }}</p>
+      <p class="select-text text-center">{{ profile.description }}</p>
       <div class="pt-14" />
       <div class="flex flex-col gap-[12px] w-full items-center">
         <LinkBox
@@ -58,7 +78,7 @@ fetchLinks(username);
       </div>
       <VisitorPopUp 
       class="mt-4"
-      v-if="!isBottomPopUpActive"
+      v-if="isBottomPopUpActive"
       :primary-color="profile.secondaryColor"
       :secondary-color="profile.primaryColor"
       @closePopUp="isBottomPopUpActive = !isBottomPopUpActive"
