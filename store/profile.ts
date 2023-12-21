@@ -182,7 +182,26 @@ export const useProfileStore = defineStore("profile", {
       if (data.value) {
         this.links = data.value.links;
       } else if (error.value) {
-        console.log("error on dSeleteLinks", error.value?.message);
+        console.log("error on deleteLinks", error.value?.message);
+        this.error = error.value as ErrorResponse;
+      }
+    },
+    async incrementClick(linkID: string, username: string) {
+      const { data, error } = await useFetch<Link>(
+        `/api/v1/profile/${username}/link/${linkID}/increment-click`,
+        {
+          method: "put",
+          baseURL: useRuntimeConfig().public.APIBaseUrl,
+          credentials: "include",
+        },
+      );
+      if (data.value) {
+        const newLinks = this.links.map((link) =>
+          link.ID === data.value?.ID ? data.value : link,
+        );
+        this.links = newLinks;
+      } else if (error.value) {
+        console.log("error on incrementClick", error.value?.message);
         this.error = error.value as ErrorResponse;
       }
     },

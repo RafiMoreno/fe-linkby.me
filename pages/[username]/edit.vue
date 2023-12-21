@@ -19,6 +19,8 @@ const isImageEditorActive = useState<Boolean>(
 const isOverlayActive = useState<Boolean>("isOverlayActive", () => false);
 const isAddLinkActive = useState<Boolean>("isAddLinkActive", () => false);
 const isEditLinkActive = useState<Boolean>("isEditLinkActive", () => false);
+const isViewClicksActive = ref(false);
+
 const linkEditData = ref<Link>();
 
 const { isLoading, profile, links, pageStyle } = storeToRefs(useProfileStore());
@@ -96,18 +98,30 @@ definePageMeta({
         isOverlayActive = false;
       "
     />
-    <div class="flex flex-row p-2">
-      <div>
-        <Icon
-          icon="material-symbols:palette-outline"
-          color="pageStyle"
-          width="32"
-          @click="
-            isColorEditorActive = !isColorEditorActive;
-            isOverlayActive = !isOverlayActive;
-          "
-        />
-      </div>
+    <div class="flex flex-row p-2 gap-4">
+      <Icon
+        icon="material-symbols:palette-outline"
+        color="pageStyle"
+        width="32"
+        @click="
+          isColorEditorActive = !isColorEditorActive;
+          isOverlayActive = !isOverlayActive;
+        "
+      />
+      <Icon
+        v-if="!isViewClicksActive"
+        icon="carbon:view"
+        color="pageStyle"
+        width="32"
+        @click="isViewClicksActive = true"
+      />
+      <Icon
+        v-if="isViewClicksActive"
+        icon="carbon:view-off-filled"
+        color="pageStyle"
+        width="32"
+        @click="isViewClicksActive = false"
+      />
       <div class="ml-auto">
         <Icon
           icon="ic:outline-done"
@@ -168,6 +182,7 @@ definePageMeta({
         variant="edit"
         :primary-color="profile.primaryColor"
         :secondary-color="profile.secondaryColor"
+        :show-click-count="isViewClicksActive"
         @click="() => handleLinkEdit(link)"
       >
         {{ link.title }}
