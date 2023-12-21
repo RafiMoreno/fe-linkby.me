@@ -77,7 +77,11 @@ definePageMeta({
     <ImageEditor
       v-if="isImageEditorActive"
       :username="username"
-      :current-display-picture="profile ? profile.displayPicture : ''"
+      :current-display-picture="
+        profile?.displayPicture != '' && profile?.displayPicture != null
+          ? profile.displayPicture
+          : 'img/default_profile.jpg'
+      "
       @close-editor="
         isImageEditorActive = !isImageEditorActive;
         isOverlayActive = !isOverlayActive;
@@ -148,12 +152,12 @@ definePageMeta({
             "
           />
           <NuxtImg
-            v-if="
-              profile.displayPicture != undefined &&
-              profile.displayPicture != ''
-            "
             class="object-cover w-[150px] rounded-[50%] aspect-square profileImg"
-            :src="profile.displayPicture"
+            :src="
+              profile.displayPicture != '' && profile?.displayPicture != null
+                ? profile.displayPicture
+                : 'img/default_profile.jpg'
+            "
           />
         </div>
         <div
