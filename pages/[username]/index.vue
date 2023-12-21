@@ -72,12 +72,13 @@ const copyUrl = () => {
           {{ link.title }}
         </LinkBox>
       </div>
+      <div class="pt-8" />
       <VisitorPopUp
         v-if="isBottomPopUpActive"
-        class="mt-4"
+        class="absolute mt-4 bottom-0"
         :primary-color="profile.secondaryColor"
         :secondary-color="profile.primaryColor"
-        @close-pop-up="isBottomPopUpActive = !isBottomPopUpActive"
+        @closePopUp="isBottomPopUpActive = !isBottomPopUpActive"
       />
     </div>
   </div>
