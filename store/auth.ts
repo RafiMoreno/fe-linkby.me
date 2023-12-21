@@ -17,8 +17,9 @@ export const useAuthStore = defineStore("auth", {
           baseURL: useRuntimeConfig().public.APIBaseUrl,
           method: "post",
           headers: { "Content-Type": "application/json" },
-          body: payload,
           key: payload.username + payload.password,
+          credentials: "include",
+          body: payload,
         },
       );
       console.log("store/auth.ts authenticateUser");
@@ -26,8 +27,6 @@ export const useAuthStore = defineStore("auth", {
       this.loading = pending.value;
       if (data.value) {
         console.log(data);
-        const token = useCookie("token"); // useCookie new hook in nuxt 3
-        token.value = data.value.token; // set token to cookie
         const username = useCookie("username"); // useCookie new hook in nuxt 3
         username.value = payload.username; // set token to cookie
         this.authenticated = true; // set authenticated  state value to true

@@ -6,11 +6,9 @@ const snackbar = useSnackbar();
 const route = useRoute();
 const username: string = route.params.username.toString();
 const isMyProfile = isProfileOwner(username).value;
-const isBottomPopUpActive =
-  useCookie("token").value == undefined ? ref(true) : ref(false);
+const isBottomPopUpActive = ref(useCookie("token").value === undefined);
 
-const { isLoading, profile, links, error, pageStyle } =
-  storeToRefs(useProfileStore());
+const { isLoading, profile, links, pageStyle } = storeToRefs(useProfileStore());
 const { fetchProfile, fetchLinks } = useProfileStore();
 fetchProfile(username);
 fetchLinks(username);
@@ -20,7 +18,6 @@ const copyUrl = () => {
   snackbar.add({
     type: "success",
     text: "Successfully copied link",
-    background: profile.value?.secondaryColor,
   });
 };
 </script>
