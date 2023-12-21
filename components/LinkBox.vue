@@ -19,6 +19,9 @@ const props = defineProps({
     type: String,
     default: "#FFFFFF",
   },
+  showClickCount: {
+    type: Boolean,
+  },
 });
 
 const handleClick = () => {
@@ -28,6 +31,17 @@ const handleClick = () => {
       w.focus();
     }
   }
+};
+
+const formatClickCount = (n: number) => {
+  const count =
+    n >= 1000
+      ? `${Math.floor(n / 1000)}k`
+      : n >= 1000000
+        ? `${Math.floor(n / 1000000)}m`
+        : n;
+  const click = n === 1 ? "click" : "clicks";
+  return `${count} ${click}`;
 };
 </script>
 
@@ -53,8 +67,11 @@ const handleClick = () => {
     />
     <div v-else class="w-[32px] h-[32px]" />
 
-    <div class="flex-1 font-bold">
-      <slot />
+    <div class="flex-1 flex flex-col">
+      <span class="font-bold"><slot /></span>
+      <span v-if="showClickCount" class="">
+        {{ formatClickCount(link.clickCount) }}
+      </span>
     </div>
     <div
       v-if="variant == 'edit'"

@@ -17,7 +17,7 @@ interface Link {
   ID: string;
   url: string;
   title: string;
-  clickCount: string;
+  clickCount: number;
   iconUrl?: string;
   iconColor?: string;
 }
