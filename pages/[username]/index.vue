@@ -6,8 +6,8 @@ const snackbar = useSnackbar();
 const route = useRoute();
 const username: string = route.params.username.toString();
 const isMyProfile = isProfileOwner(username).value;
-const isBottomPopUpActive = useCookie("token").value == undefined ? ref(true) : ref(false);
-
+const isBottomPopUpActive =
+  useCookie("token").value == undefined ? ref(true) : ref(false);
 
 const { isLoading, profile, links, error, pageStyle } =
   storeToRefs(useProfileStore());
@@ -20,9 +20,9 @@ const copyUrl = () => {
   snackbar.add({
     type: "success",
     text: "Successfully copied link",
-    background: profile.value?.secondaryColor
+    background: profile.value?.secondaryColor,
   });
-}
+};
 </script>
 
 <template>
@@ -49,7 +49,6 @@ const copyUrl = () => {
         class=""
         @click="navigateTo(`${username}/edit`)"
       />
-      
     </div>
     <div
       v-if="profile != null"
@@ -76,20 +75,13 @@ const copyUrl = () => {
           {{ link.title }}
         </LinkBox>
       </div>
-      <VisitorPopUp 
-      class="mt-4"
-      v-if="isBottomPopUpActive"
-      :primary-color="profile.secondaryColor"
-      :secondary-color="profile.primaryColor"
-      @closePopUp="isBottomPopUpActive = !isBottomPopUpActive"
+      <VisitorPopUp
+        v-if="isBottomPopUpActive"
+        class="mt-4"
+        :primary-color="profile.secondaryColor"
+        :secondary-color="profile.primaryColor"
+        @close-pop-up="isBottomPopUpActive = !isBottomPopUpActive"
       />
-    </div>
-    <div v-if="error">
-      <ul>
-        <li>
-          {{ error }}
-        </li>
-      </ul>
     </div>
   </div>
 </template>
