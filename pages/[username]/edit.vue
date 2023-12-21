@@ -19,7 +19,7 @@ const isImageEditorActive = useState<Boolean>(
 const isOverlayActive = useState<Boolean>("isOverlayActive", () => false);
 const isAddLinkActive = useState<Boolean>("isAddLinkActive", () => false);
 const isEditLinkActive = useState<Boolean>("isEditLinkActive", () => false);
-const isViewClicksActive = useState<Boolean>("isViewClicksActive", () => false);
+const isViewClicksActive = ref(false);
 
 const linkEditData = ref<Link>();
 
