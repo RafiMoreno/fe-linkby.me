@@ -36,10 +36,11 @@ const onFileChange = (e: any) => {
 };
 
 const handleSubmit = async () => {
-  if (imgUrl.value != props.currentDisplayPicture) {
+  if (imgUrl.value !== props.currentDisplayPicture) {
     isLoading.value = true;
     await editDisplayImage(fd, props.username);
     if (error.value) {
+      isLoading.value = false;
       snackbar.add({
         type: "error",
         text: error.value.data?.error ?? "Error while editing display picture",
@@ -52,6 +53,7 @@ const handleSubmit = async () => {
       emit("closeEditor");
     }
   } else {
+    isLoading.value = false;
     snackbar.add({
       type: "error",
       text: "Please select a image",
@@ -74,7 +76,7 @@ const handleSubmit = async () => {
     <p class="text-center font-bold text-xl">Edit Display Picture</p>
     <div class="flex justify-center">
       <NuxtImg
-        v-if="currentDisplayPicture != undefined && currentDisplayPicture != ''"
+        v-if="imgUrl != ''"
         class="object-cover w-[150px] rounded-[50%] aspect-square profileImg"
         :src="imgUrl"
       />
@@ -84,6 +86,7 @@ const handleSubmit = async () => {
       <input
         id="imageinput"
         type="file"
+        accept="image/*"
         class="hidden"
         @change="onFileChange"
       />
