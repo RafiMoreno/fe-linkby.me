@@ -4,7 +4,7 @@ const props = defineProps({
   variant: {
     type: String,
     validators: (value: string) =>
-      ["default", "edit", "view", "add"].includes(value),
+      ["default", "edit", "create"].includes(value),
     default: "default",
   },
   link: {
@@ -19,15 +19,36 @@ const props = defineProps({
     type: String,
     default: "#FFFFFF",
   },
+  showClickCount: {
+    type: Boolean,
+  },
 });
+
+const route = useRoute();
+
+const username: string = route.params.username.toString();
+
+const { incrementClick } = useProfileStore();
 
 const handleClick = () => {
   if (process.browser && props.variant === "default") {
+    incrementClick(props.link.ID, username);
     const w = window.open(props.link.url, "_blank");
     if (w) {
       w.focus();
     }
   }
+};
+
+const formatClickCount = (n: number) => {
+  const count =
+    n >= 1000
+      ? `${Math.floor(n / 1000)}k`
+      : n >= 1000000
+        ? `${Math.floor(n / 1000000)}m`
+        : n;
+  const click = n === 1 ? "click" : "clicks";
+  return `${count}`;
 };
 </script>
 
@@ -53,8 +74,14 @@ const handleClick = () => {
     />
     <div v-else class="w-[32px] h-[32px]" />
 
-    <div class="flex-1 font-bold">
-      <slot />
+    <div class="flex-1 flex flex-col">
+      <span class="font-bold"><slot /></span>
+      <div v-if="showClickCount" class="flex items-center gap-1 font-bold">
+        <Icon icon="mdi:cursor-default-click-outline" />
+        <span class="text-xs">
+          {{ formatClickCount(link.clickCount) }}
+        </span>
+      </div>
     </div>
     <div
       v-if="variant == 'edit'"
